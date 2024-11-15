@@ -1,0 +1,2 @@
+This is the repository for Alisha and Marina's code for their final project for E155-Microprocessor Systems, which is building a real life system
+imitating Remy the Rat from Ratatouille. The system will integrate two IMUs while controlling two servo motors and communicate using I2C and RF, using an upDuino FPGA and a STM32 microcontroller to implement this design.
