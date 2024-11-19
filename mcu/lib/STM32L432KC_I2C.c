@@ -36,6 +36,9 @@ void i2cConfig(void) {
     I2C1->CR1 &= ~I2C_CR1_PE;
 
     // configure ANFOFF and DNF in CR1
+    
+    // turn on TX interrupts
+    I2C1->CR1 |= I2C_CR1_TXIE;
 
     // configure PRESC SDADEL SCLDEL SCLH SCLL in TIMINGR
     I2C1->TIMINGR |= _VAL2FLD(I2C_TIMINGR_PRESC, 0);
@@ -62,7 +65,6 @@ void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {
     } 
     else {
       I2C1->CR2 &= ~I2C_CR2_AUTOEND;
-      //I2C1->CR2 |= I2C_CR2_RELOAD;
     }
 
     // configure size of data package
@@ -76,7 +78,7 @@ void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {
 
     // send over each byte in the data package
     for (int i = 0; i < num_bytes; i++) {
-      while(!(I2C1->ISR & I2C_ISR_TXE)); // wait until transmit buffer is empty
+      while(!(I2C1->ISR & I2C_ISR_TXIS)); // wait until transmit buffer is empty
       I2C1->TXDR = TX_Buffer[i];
     }
 

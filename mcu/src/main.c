@@ -13,7 +13,7 @@
 // Constants
 ////////////////////////////////////////////////
 
-
+float beta = 0.025;
 
 ////////////////////////////////////////////////
 // Main
@@ -39,18 +39,13 @@ int main(void) {
   uint8_t read_temp_msb[1] = {0x41};
   uint8_t read_temp_lsb[1] = {0x42};
   uint8_t temp_msb[1] = {0};
+  uint8_t temp_lsb[1] = {0};
 
-  // read msb
-  //i2cWrite(ADDRESS, read_temp_msb, 1, 1);
-  
-  //delay_millis(TIM16, 50);
+  // read temp
+  readMPU(temp_msb, temp_lsb);
 
-  i2cRead(ADDRESS, temp_msb, 1);
-  // read lsb
-  //i2cWrite(ADDRESS, read_temp_lsb, 1, 0);
-  //i2cRead(ADDRESS, temp_lsb, 1);
-
-
+  int temp_val = (temp_msb[0] << 8) | temp_lsb[0];
+  float temp = ((float)temp_val) / 340 + 36.53;
   
 
   //uint8_t temp_lsb[1] = {};
@@ -59,7 +54,11 @@ int main(void) {
   //while(1) {
   //  readMPU(temp_msb, temp_lsb);
   //  int temp_val = (temp_msb[0] << 8) | temp_lsb[0];
-  //  float temp = ((float)temp_val) / 340 + 36.53;
+
+  // // low pass filter
+  //  float filtered_temp_val = filtered_temp_val - (beta * (filtered_temp_val - (float)temp_val))
+
+  //  float temp = (filtered_temp_val) / 340 + 36.53;
   //}
 
 }
