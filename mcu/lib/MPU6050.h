@@ -1,28 +1,24 @@
-// STM32L432KC_GPIO.h
-// Header for GPIO functions
+// MPU6050.h
+// Header for interfacing with MPU 6050 chip 
 
-#ifndef STM32L4_I2C_H
-#define STM32L4_I2C_H
+#ifndef MPU6050_H
+#define MPU6050_H
 
 #include <stdint.h> // Include stdint header
-#include <stm32l432xx.h>
+#include "STM32L432KC_I2C.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Definitions
 ///////////////////////////////////////////////////////////////////////////////
 
-#define SDA PA10
-#define SCL PA9
+#define ADDRESS 0b1101000 // AD0 is logic low
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Function prototypes
 ///////////////////////////////////////////////////////////////////////////////
 
-void i2cConfig(void);
-
-void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop);
-
-void i2cRead(int address, uint8_t * RX_Buffer, int num_bytes);
-
+void configMPU(void);
+void readMPU(uint8_t * temp_msb, uint8_t * temp_lsb);
 
 #endif

@@ -9,6 +9,7 @@
 #define MAIN_H
 
 #include "../lib/STM32L432KC.h"
+#include "../lib/MPU6050.h"
 // #include "../lib/IMU something something.h"
 
 #define LED_PIN PB3 // LED pin for blinking on Port B pin 5
