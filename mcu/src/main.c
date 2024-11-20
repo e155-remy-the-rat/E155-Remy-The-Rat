@@ -14,6 +14,8 @@
 ////////////////////////////////////////////////
 
 float beta = 0.025;
+uint8_t temp_msb[1];
+uint8_t temp_lsb[1];
 
 ////////////////////////////////////////////////
 // Main
@@ -35,17 +37,13 @@ int main(void) {
   // Configure IMU chip
   configICM();
 
-  uint8_t temp_msb[1] = {0};
-  uint8_t temp_lsb[1] = {0};
-  uint8_t read_temp_msb[1] = {0x39};
-  uint8_t read_temp_lsb[1] = {0x3A};
-  uint8_t read_who_am_i[1] = {0x00};
-  uint8_t who_am_i[1] = {};
+  //uint8_t read_who_am_i[1] = {0x00};
+  //uint8_t who_am_i[1];
 
   // read temp
-  //readTempICM(temp_msb, temp_lsb);
-  i2cWrite(ICM_ADDRESS, read_who_am_i, 1, 0);
-  i2cRead(ICM_ADDRESS, who_am_i, 1);
+  readTempICM(temp_msb, temp_lsb);
+  //i2cWrite(ICM_ADDRESS, read_who_am_i, 1, 0);
+  //i2cRead(ICM_ADDRESS, who_am_i, 1);
 
   int temp_val = (temp_msb[0] << 8) | temp_lsb[0];
   float room_temp_offset = 0.0;

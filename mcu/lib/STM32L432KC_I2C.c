@@ -39,6 +39,10 @@ void i2cConfig(void) {
     
     // turn on TX interrupts
     I2C1->CR1 |= I2C_CR1_TXIE;
+    I2C1->CR1 |= I2C_CR1_TCIE;
+
+    // enable byte control
+    I2C1->CR1 |= I2C_CR1_SBC;
 
     // configure PRESC SDADEL SCLDEL SCLH SCLL in TIMINGR
     // run at 400 kHz for fast mode
@@ -56,26 +60,28 @@ void i2cConfig(void) {
     I2C1->CR1 |= I2C_CR1_PE;
 }
 
-void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {
+void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {        
     // configure address, assumes 7 bit address
     I2C1->CR2 |= (address << 1); // put seven bits of address in starting in bit 1 of the CR2 register
 
     // if we are not stopping, we reload at the end of num_bytes, otherwise we autoend
-    if (stop) {
-      I2C1->CR2 |= I2C_CR2_AUTOEND;
-    } 
-    else {
-      I2C1->CR2 &= ~I2C_CR2_AUTOEND;
-    }
+    //if (stop) {
+    //  I2C1->CR2 |= I2C_CR2_AUTOEND;
+    //} 
+    //else {
+    //  I2C1->CR2 |= I2C_CR2_AUTOEND;
+    //  I2C1->CR2 |= I2C_CR2_RELOAD; 
+    //  //I2C1->CR2 &= ~I2C_CR2_AUTOEND;
+    //}
 
     // configure size of data package
-    I2C1->CR2 |= _VAL2FLD(I2C_CR2_NBYTES, num_bytes);
+    I2C1->CR2 |= _VAL2FLD(I2C_CR2_NBYTES, (uint8_t)num_bytes);
 
     // set the read/not write bit to 0 for write
     I2C1->CR2 &= ~I2C_CR2_RD_WRN;
 
     // signal to start
-    I2C1->CR2 |= I2C_CR2_START;
+    I2C1->CR2 |= I2C_CR2_START; //|  _VAL2FLD(I2C_CR2_NBYTES, (uint8_t)num_bytes) | (address << 1);
 
     // send over each byte in the data package
     for (int i = 0; i < num_bytes; i++) {
@@ -83,29 +89,38 @@ void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {
       I2C1->TXDR = TX_Buffer[i];
     }
 
-  
+    if (stop) {
+      I2C1->CR2 |= I2C_CR2_STOP;
+      while(I2C1->CR2 & I2C_CR2_STOP);
+    }
+
+
 }
 
 
 void i2cRead(int address, uint8_t * RX_Buffer, int num_bytes) {
+
     // configure address, assumes 7 bit address
     I2C1->CR2 |= (address << 1); // put seven bits of address in starting in bit 1 of the CR2 register
 
     // set autoend
-    I2C1->CR2 |= I2C_CR2_AUTOEND;
+    //I2C1->CR2 |= I2C_CR2_AUTOEND;
 
     // configure size of data package
-    I2C1->CR2 |= _VAL2FLD(I2C_CR2_NBYTES, num_bytes);
+    //I2C1->CR2 |= _VAL2FLD(I2C_CR2_NBYTES, (uint8_t)num_bytes);
 
     // set the read/not write bit to 1 for read
     I2C1->CR2 |= I2C_CR2_RD_WRN;
 
     // signal to start
-    I2C1->CR2 |= I2C_CR2_START;
+    I2C1->CR2 |= I2C_CR2_START | _VAL2FLD(I2C_CR2_NBYTES, (uint8_t)num_bytes);
 
    // read in each byte desired
     for (int i = 0; i < num_bytes; i++) {
       while(!(I2C1->ISR & I2C_ISR_RXNE)); // wait until data is ready to be read
       RX_Buffer[num_bytes - i - 1] = I2C1->RXDR;
     }
+
+    I2C1->CR2 |= I2C_CR2_STOP;
+    while(I2C1->CR2 & I2C_CR2_STOP);
 }

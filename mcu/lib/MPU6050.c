@@ -18,10 +18,10 @@ void readMPU(uint8_t * temp_msb, uint8_t * temp_lsb) {
     uint8_t read_temp_lsb[1] = {0x42};
 
     // read msb
-    i2cWrite(ADDRESS, read_temp_msb, 1, 0);
-    i2cRead(ADDRESS, temp_msb, 1);
+    i2cWrite(ADDRESS, read_temp_msb, 0b01, 0);
+    i2cRead(ADDRESS, temp_msb, 0b01);
 
     // read lsb
-    i2cWrite(ADDRESS, read_temp_lsb, 1, 0);
-    i2cRead(ADDRESS, temp_lsb, 1);
+    i2cWrite(ADDRESS, read_temp_lsb, 0b01, 0);
+    i2cRead(ADDRESS, temp_lsb, 0b01);
 };
