@@ -65,16 +65,17 @@ void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {
     I2C1->CR2 |= (address << 1); // put seven bits of address in starting in bit 1 of the CR2 register
 
     // if we are not stopping, we reload at the end of num_bytes, otherwise we autoend
-    //if (stop) {
-    //  I2C1->CR2 |= I2C_CR2_AUTOEND;
-    //} 
-    //else {
-    //  I2C1->CR2 |= I2C_CR2_AUTOEND;
-    //  I2C1->CR2 |= I2C_CR2_RELOAD; 
-    //  //I2C1->CR2 &= ~I2C_CR2_AUTOEND;
-    //}
+    if (stop) {
+      I2C1->CR2 |= I2C_CR2_AUTOEND;
+    } 
+    else {
+      //I2C1->CR2 |= I2C_CR2_AUTOEND;
+      //I2C1->CR2 |= I2C_CR2_RELOAD; 
+      I2C1->CR2 &= ~I2C_CR2_AUTOEND;
+    }
 
     // configure size of data package
+    I2C1->CR2 &= ~I2C_CR2_NBYTES;
     I2C1->CR2 |= _VAL2FLD(I2C_CR2_NBYTES, (uint8_t)num_bytes);
 
     // set the read/not write bit to 0 for write
@@ -89,10 +90,10 @@ void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {
       I2C1->TXDR = TX_Buffer[i];
     }
 
-    if (stop) {
-      I2C1->CR2 |= I2C_CR2_STOP;
-      while(I2C1->CR2 & I2C_CR2_STOP);
-    }
+    //if (stop) {
+    //  I2C1->CR2 |= I2C_CR2_STOP;
+    //  while(I2C1->CR2 & I2C_CR2_STOP);
+    //}
 
 
 }
@@ -104,16 +105,17 @@ void i2cRead(int address, uint8_t * RX_Buffer, int num_bytes) {
     I2C1->CR2 |= (address << 1); // put seven bits of address in starting in bit 1 of the CR2 register
 
     // set autoend
-    //I2C1->CR2 |= I2C_CR2_AUTOEND;
+    I2C1->CR2 |= I2C_CR2_AUTOEND;
 
     // configure size of data package
-    //I2C1->CR2 |= _VAL2FLD(I2C_CR2_NBYTES, (uint8_t)num_bytes);
+    I2C1->CR2 &= ~I2C_CR2_NBYTES;
+    I2C1->CR2 |= _VAL2FLD(I2C_CR2_NBYTES, (uint8_t)num_bytes);
 
     // set the read/not write bit to 1 for read
     I2C1->CR2 |= I2C_CR2_RD_WRN;
 
     // signal to start
-    I2C1->CR2 |= I2C_CR2_START | _VAL2FLD(I2C_CR2_NBYTES, (uint8_t)num_bytes);
+    I2C1->CR2 |= I2C_CR2_START;
 
    // read in each byte desired
     for (int i = 0; i < num_bytes; i++) {
@@ -121,6 +123,6 @@ void i2cRead(int address, uint8_t * RX_Buffer, int num_bytes) {
       RX_Buffer[num_bytes - i - 1] = I2C1->RXDR;
     }
 
-    I2C1->CR2 |= I2C_CR2_STOP;
-    while(I2C1->CR2 & I2C_CR2_STOP);
+    //I2C1->CR2 |= I2C_CR2_STOP;
+    //while(I2C1->CR2 & I2C_CR2_STOP);
 }
