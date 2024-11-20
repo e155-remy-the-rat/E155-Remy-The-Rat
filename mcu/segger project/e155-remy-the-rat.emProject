@@ -60,6 +60,8 @@
     <folder Name="Source Files">
       <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc" />
       <folder Name="lib">
+        <file file_name="../lib/ICM20948.c" />
+        <file file_name="../lib/ICM20948.h" />
         <file file_name="../lib/MPU6050.c" />
         <file file_name="../lib/MPU6050.h" />
         <file file_name="../lib/STM32L432KC.h" />

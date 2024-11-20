@@ -5,8 +5,12 @@
 
 void configMPU(void) {
     uint8_t temp_enable[2] = {0x23, 0x80};
-    // Write to address
     i2cWrite(ADDRESS, temp_enable, 2, 1);
+
+    uint8_t sample_rate[2] = {0x19, 7};
+    i2cWrite(ADDRESS, sample_rate, 2, 1);
+
+
 };
 
 void readMPU(uint8_t * temp_msb, uint8_t * temp_lsb) {

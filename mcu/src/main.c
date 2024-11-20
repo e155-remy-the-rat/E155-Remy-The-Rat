@@ -32,20 +32,25 @@ int main(void) {
   // Configure I2C communication
   i2cConfig();
 
+  // Configure IMU chip
+  configICM();
 
-
-  //configMPU();
-
-  uint8_t read_temp_msb[1] = {0x41};
-  uint8_t read_temp_lsb[1] = {0x42};
   uint8_t temp_msb[1] = {0};
   uint8_t temp_lsb[1] = {0};
+  uint8_t read_temp_msb[1] = {0x39};
+  uint8_t read_temp_lsb[1] = {0x3A};
+  uint8_t read_who_am_i[1] = {0x00};
+  uint8_t who_am_i[1] = {};
 
   // read temp
-  readMPU(temp_msb, temp_lsb);
+  //readTempICM(temp_msb, temp_lsb);
+  i2cWrite(ICM_ADDRESS, read_who_am_i, 1, 0);
+  i2cRead(ICM_ADDRESS, who_am_i, 1);
 
   int temp_val = (temp_msb[0] << 8) | temp_lsb[0];
-  float temp = ((float)temp_val) / 340 + 36.53;
+  float room_temp_offset = 0.0;
+  float temp_sensitivity = 333.87;
+  float temp = (((float)temp_val - room_temp_offset)/(temp_sensitivity)) + 21.0;
   
 
   //uint8_t temp_lsb[1] = {};
