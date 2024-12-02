@@ -14,14 +14,15 @@
 ////////////////////////////////////////////////
 
 float beta = 0.025;
-uint8_t temp_msb[1];
-uint8_t temp_lsb[1];
+
 
 ////////////////////////////////////////////////
 // Main
 ////////////////////////////////////////////////
 
 int main(void) {
+  uint8_t temp_msb;
+  uint8_t temp_lsb;
 
   // Configure flash latency and set clock to run at 84 MHz
   configureFlash();
@@ -40,28 +41,33 @@ int main(void) {
   //uint8_t read_who_am_i[1] = {0x00};
   //uint8_t who_am_i[1];
 
-  // read temp
-  readTempICM(temp_msb, temp_lsb);
-  //i2cWrite(ICM_ADDRESS, read_who_am_i, 1, 0);
-  //i2cRead(ICM_ADDRESS, who_am_i, 1);
+  //// read temp
+  //readTempICM(&temp_msb, &temp_lsb);
+  ////i2cWrite(ICM_ADDRESS, read_who_am_i, 1, 0);
+  ////i2cRead(ICM_ADDRESS, who_am_i, 1);
 
-  int temp_val = (temp_msb[0] << 8) | temp_lsb[0];
+  //int temp_val = (temp_msb << 8) | temp_lsb;
+  //int temp_val_convert = (temp_val & (1 << 16)) ? (-1 * (float)(~temp_val + 1)) : temp_val;
   float room_temp_offset = 0.0;
   float temp_sensitivity = 333.87;
-  float temp = (((float)temp_val - room_temp_offset)/(temp_sensitivity)) + 21.0;
+  //float temp = (((float)temp_val_convert - room_temp_offset)/(temp_sensitivity)) + 21.0;
   
 
   //uint8_t temp_lsb[1] = {};
   //uint8_t temp_msb[1] = {};
 
-  //while(1) {
-  //  readMPU(temp_msb, temp_lsb);
-  //  int temp_val = (temp_msb[0] << 8) | temp_lsb[0];
+  float temp;
+  int temp_val, temp_val_convert;
 
-  // // low pass filter
-  //  float filtered_temp_val = filtered_temp_val - (beta * (filtered_temp_val - (float)temp_val))
+  while(1) {
+    readTempICM(&temp_msb, &temp_lsb);
+    temp_val = (temp_msb << 8) | temp_lsb;
+    temp_val_convert = ((temp_msb >> 7) & 1) ? (temp_val | ~((1 << 16) - 1)) : temp_val;
+    temp = (((float)temp_val_convert - room_temp_offset)/(temp_sensitivity)) + 21.0;
+    //delay_millis(TIM16, 10);
 
-  //  float temp = (filtered_temp_val) / 340 + 36.53;
-  //}
+   // low pass filter
+    //float filtered_temp_val = filtered_temp_val - (beta * (filtered_temp_val - (float)temp_val))
+  }
 
 }
