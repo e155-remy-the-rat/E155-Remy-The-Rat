@@ -62,6 +62,7 @@ void i2cConfig(void) {
 
 void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {        
     // configure address, assumes 7 bit address
+    I2C1->CR2 &= I2C_CR2_ADD10;
     I2C1->CR2 |= (address << 1); // put seven bits of address in starting in bit 1 of the CR2 register
 
     // if we are not stopping, we reload at the end of num_bytes, otherwise we autoend
@@ -102,6 +103,7 @@ void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {
 void i2cRead(int address, uint8_t * RX_Buffer, int num_bytes) {
 
     // configure address, assumes 7 bit address
+    I2C1->CR2 &= I2C_CR2_ADD10;
     I2C1->CR2 |= (address << 1); // put seven bits of address in starting in bit 1 of the CR2 register
 
     // set autoend

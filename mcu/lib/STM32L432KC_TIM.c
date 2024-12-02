@@ -24,3 +24,6 @@ void delay_millis(TIM_TypeDef * TIMx, uint32_t ms){
 
   while(!(TIMx->SR & 1)); // Wait for UIF to go high
 }
+
+
+

@@ -17,17 +17,29 @@ float beta = 0.025;
 
 
 ////////////////////////////////////////////////
+// Functions
+////////////////////////////////////////////////
+
+// Function used by printf to send characters to the laptop
+int _write(int file, char *ptr, int len) {
+  int i = 0;
+  for (i = 0; i < len; i++) {
+    ITM_SendChar((*ptr++));
+  }
+  return len;
+}
+
+
+////////////////////////////////////////////////
 // Main
 ////////////////////////////////////////////////
 
 int main(void) {
-  uint8_t temp_msb;
-  uint8_t temp_lsb;
-
   // Configure flash latency and set clock to run at 84 MHz
   configureFlash();
   configureClock();
-  initTIM(TIM16);
+  RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
+  initTIM(TIM2);
 
   // Enable GPIO clock
   RCC->AHB2ENR |= (RCC_AHB2ENR_GPIOAEN | RCC_AHB2ENR_GPIOBEN | RCC_AHB2ENR_GPIOCEN);
@@ -35,36 +47,40 @@ int main(void) {
   // Configure I2C communication
   i2cConfig();
 
-  // Configure IMU chip
-  configICM();
+  // Configure IMU chips
+  configICM(ICM_ADDRESS1);
+  configICM(ICM_ADDRESS2);
 
+  // WHO AM I TEST 
   //uint8_t read_who_am_i[1] = {0x00};
   //uint8_t who_am_i[1];
+  //i2cWrite(ICM_ADDRESS1, read_who_am_i, 1, 0);
+  //i2cRead(ICM_ADDRESS1, who_am_i, 1);
 
-  //// read temp
-  //readTempICM(&temp_msb, &temp_lsb);
-  ////i2cWrite(ICM_ADDRESS, read_who_am_i, 1, 0);
-  ////i2cRead(ICM_ADDRESS, who_am_i, 1);
-
-  //int temp_val = (temp_msb << 8) | temp_lsb;
-  //int temp_val_convert = (temp_val & (1 << 16)) ? (-1 * (float)(~temp_val + 1)) : temp_val;
   float room_temp_offset = 0.0;
   float temp_sensitivity = 333.87;
-  //float temp = (((float)temp_val_convert - room_temp_offset)/(temp_sensitivity)) + 21.0;
   
-
-  //uint8_t temp_lsb[1] = {};
-  //uint8_t temp_msb[1] = {};
-
-  float temp;
-  int temp_val, temp_val_convert;
+  uint8_t temp_msb1, temp_msb2;
+  uint8_t temp_lsb1, temp_lsb2;
+  float temp1, temp2;
+  int temp_val1, temp_val2, temp_val_convert1, temp_val_convert2;
 
   while(1) {
-    readTempICM(&temp_msb, &temp_lsb);
-    temp_val = (temp_msb << 8) | temp_lsb;
-    temp_val_convert = ((temp_msb >> 7) & 1) ? (temp_val | ~((1 << 16) - 1)) : temp_val;
-    temp = (((float)temp_val_convert - room_temp_offset)/(temp_sensitivity)) + 21.0;
-    //delay_millis(TIM16, 10);
+    // send/receive I2C for temp value
+    readTempICM(ICM_ADDRESS1, &temp_msb1, &temp_lsb1);
+    readTempICM(ICM_ADDRESS2, &temp_msb2, &temp_lsb2);
+    
+    // convert temp value
+    temp_val1 = (temp_msb1 << 8) | temp_lsb1;
+    temp_val_convert1 = ((temp_msb1 >> 7) & 1) ? (temp_val1 | ~((1 << 16) - 1)) : temp_val1;
+    temp1 = (((float)temp_val_convert1 - room_temp_offset)/(temp_sensitivity)) + 21.0;
+    
+    temp_val2 = (temp_msb2 << 8) | temp_lsb2;
+    temp_val_convert2 = ((temp_msb2 >> 7) & 1) ? (temp_val2 | ~((1 << 16) - 1)) : temp_val2;
+    temp2 = (((float)temp_val_convert2 - room_temp_offset)/(temp_sensitivity)) + 21.0;
+    
+    printf("Temp 1: %f,  Temp 2: %f \n", temp1, temp2);
+    delay_millis(TIM2, 100);
 
    // low pass filter
     //float filtered_temp_val = filtered_temp_val - (beta * (filtered_temp_val - (float)temp_val))

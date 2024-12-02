@@ -11,14 +11,16 @@
 // Definitions
 ///////////////////////////////////////////////////////////////////////////////
 
-#define ICM_ADDRESS 0b1101001 // AD0 is logic high
+#define ICM_ADDRESS1 0b1101001 // AD0 is logic high
+#define ICM_ADDRESS2 0b1101000 // AD0 is logic low
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Function prototypes
 ///////////////////////////////////////////////////////////////////////////////
 
-void configICM(void);
-void readTempICM(uint8_t * temp_msb, uint8_t * temp_lsb);
+void configICM(int address);
+void readTempICM(int address, uint8_t * temp_msb, uint8_t * temp_lsb);
+void readAccelZICM(int address, uint8_t * accelz_msb, uint8_t * accelz_lsb);
 
 #endif
