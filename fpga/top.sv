@@ -1,13 +1,33 @@
+module top (
+	input logic rst_n,
+	input logic [3:0] instate,
+	output logic [1:0] pwm_out
+);
+	logic clk;
+	HSOSC #(.CLKHF_DIV(2'b10)) 
+         	hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(clk));
+			
+	// Each motor has 4 positions
+	logic [1:0] motor1_state;
+	logic [1:0] motor2_state;
+	
+	// For decoding, treat the first two bits as the position for the first motor, and the second two bits as the position for the second motor
+	assign {motor1_state, motor2_state} = instate;
+	
+	servocontrol motor1(clk, rst_n, motor1_state, pwm_out[0]);
+	servocontrol motor2(clk, rst_n, motor2_state, pwm_out[1]);
+endmodule
+	
+
+
 
 module servocontrol (
-   // input logic clk,           // Input clock (e.g., 12 MHz on iCE40 UltraPlus)
+    input logic clk,           // Input clock (e.g., 12 MHz on iCE40 UltraPlus)
     input logic rst_n,         // Active-low reset
-    input logic [2:0] switch,  // 3-bit switch input
+    input logic [1:0] switch,  // 3-bit switch input
     output logic pwm_out       // PWM signal to servo motor
 );
 
-	HSOSC #(.CLKHF_DIV(2'b10)) 
-         	hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(clk));
 	
     // Parameters for 20ms period and 1ms - 2ms pulse widths
     parameter CLOCK_FREQ = 12000000;       // FPGA clock frequency (12 MHz)
@@ -23,14 +43,10 @@ module servocontrol (
     logic [15:0] pulse_width_cycles; // Pulse width in clock cycles
     always_comb begin
         case (switch)
-            3'd0: pulse_width_cycles = MIN_PULSE_WIDTH * CYCLES_PER_MICROSECOND;
-            3'd1: pulse_width_cycles = (MIN_PULSE_WIDTH + 125) * CYCLES_PER_MICROSECOND;
-            3'd2: pulse_width_cycles = (MIN_PULSE_WIDTH + 250) * CYCLES_PER_MICROSECOND;
-            3'd3: pulse_width_cycles = (MIN_PULSE_WIDTH + 375) * CYCLES_PER_MICROSECOND;
-            3'd4: pulse_width_cycles = (MIN_PULSE_WIDTH + 500) * CYCLES_PER_MICROSECOND;
-            3'd5: pulse_width_cycles = (MIN_PULSE_WIDTH + 625) * CYCLES_PER_MICROSECOND;
-            3'd6: pulse_width_cycles = (MIN_PULSE_WIDTH + 750) * CYCLES_PER_MICROSECOND;
-            3'd7: pulse_width_cycles = MAX_PULSE_WIDTH * CYCLES_PER_MICROSECOND;
+            3'd0: pulse_width_cycles = 500 * CYCLES_PER_MICROSECOND; // Down
+            3'd1: pulse_width_cycles = 1000 * CYCLES_PER_MICROSECOND; // Slightly up
+            3'd2: pulse_width_cycles = 1500 * CYCLES_PER_MICROSECOND; // Mostly up
+            3'd3: pulse_width_cycles = 2000 * CYCLES_PER_MICROSECOND; // All the way up (right)
             default: pulse_width_cycles = MIN_PULSE_WIDTH * CYCLES_PER_MICROSECOND;
         endcase
     end
