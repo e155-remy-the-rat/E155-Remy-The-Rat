@@ -29,6 +29,12 @@ int _write(int file, char *ptr, int len) {
   return len;
 }
 
+float i2c_val_to_float(uint8_t msb, uint8_t lsb) {
+  uint16_t int_value = ((msb << 8) | lsb);
+  float value = (float) (((msb >> 7) & 1) ? (int_value | ~((1 << 16) - 1)) : int_value);
+  return value;
+}
+
 
 ////////////////////////////////////////////////
 // Main
@@ -57,59 +63,41 @@ int main(void) {
   //i2cWrite(ICM_ADDRESS1, read_who_am_i, 1, 0);
   //i2cRead(ICM_ADDRESS1, who_am_i, 1);
 
-  configAccelICM(ICM_ADDRESS1, 6, RANGE_2G);
+  configAccelGyroICM(ICM_ADDRESS1, 6, 0, RANGE_2G, RANGE_2000DPS);
 
-  uint8_t accel_data[6] = {};
-  uint16_t accelx_val, accely_val, accelz_val;
-  float accelz, accely, accelx;
+  uint8_t raw_data[12] = {};
+  float accel_z, accel_y, accel_x, gyro_z, gyro_y, gyro_x;
+
+  FusionAhrs ahrs;
+  FusionAhrsInitialise(&ahrs);
 
   while(1) {
-    readAccelICM(ICM_ADDRESS1, accel_data);
-    accelx_val = ((accel_data[0] << 8) | accel_data[1]);
-    accelx = (float) (((accel_data[0] >> 7) & 1) ? (accelx_val | ~((1 << 16) - 1)) : accelx_val);
-    
-    accely_val = (float)((accel_data[2] << 8) | accel_data[3]);
-    accely = (float) (((accel_data[2] >> 7) & 1) ? (accely_val | ~((1 << 16) - 1)) : accely_val);
-    
-    accelz_val = (float)((accel_data[4] << 8) | accel_data[5]);
-    accelz = (float) (((accel_data[4] >> 7) & 1) ? (accelz_val | ~((1 << 16) - 1)) : accelz_val);
+    readAccelGyroICM(ICM_ADDRESS1, raw_data);
 
-    accelx = accelx/RANGE_2G_CONVERSION;
-    accely = accely/RANGE_2G_CONVERSION;
-    accelz = accelz/RANGE_2G_CONVERSION;
+    // accel values in g's
+    accel_x = i2c_val_to_float(raw_data[0], raw_data[1])/RANGE_2G_CONVERSION;
+    accel_y = i2c_val_to_float(raw_data[2], raw_data[3])/RANGE_2G_CONVERSION;
+    accel_z = i2c_val_to_float(raw_data[4], raw_data[5])/RANGE_2G_CONVERSION;
+    
+    // gyro values in dps
+    gyro_x = i2c_val_to_float(raw_data[6], raw_data[7]);
+    gyro_y = i2c_val_to_float(raw_data[8], raw_data[9]);
+    gyro_z = i2c_val_to_float(raw_data[10], raw_data[11]);
 
-    printf("AccelX: %f, AccelY: %f, AccelZ: %f \n", accelx, accely, accelz);
+    //printf("AccelX: %f, AccelY: %f, AccelZ: %f \n", accel_x, accel_y, accel_z);
+    //printf("GyroX: %f, GyroY: %f, GyroZ: %f \n", gyro_x, gyro_y, gyro_z);
+
+    FusionVector accelerometer = {accel_x, accel_y, accel_z};
+    FusionVector gyroscope = {gyro_x, gyro_y, gyro_z};
+    
+    FusionAhrsUpdateNoMagnetometer(&ahrs, gyroscope, accelerometer, 0.1);
+
+    const FusionEuler euler = FusionQuaternionToEuler(FusionAhrsGetQuaternion(&ahrs));
+   
+    printf("GyroX: %f, GyroY: %f, GyroZ: %f \n", gyro_x, gyro_y, gyro_z);
+    printf("Roll %0.1f, Pitch %0.1f, Yaw %0.1f\n\n ", euler.angle.roll, euler.angle.pitch, euler.angle.yaw);
+    
     delay_millis(TIM2, 100);
-
   }
-
-  //float room_temp_offset = 0.0;
-  //float temp_sensitivity = 333.87;
-  
-  //uint8_t temp_msb1, temp_msb2;
-  //uint8_t temp_lsb1, temp_lsb2;
-  //float temp1, temp2;
-  //int temp_val1, temp_val2, temp_val_convert1, temp_val_convert2;
-
-  //while(1) {
-  //  // send/receive I2C for temp value
-  //  readTempICM(ICM_ADDRESS1, &temp_msb1, &temp_lsb1);
-  //  readTempICM(ICM_ADDRESS2, &temp_msb2, &temp_lsb2);
-    
-  //  // convert temp value
-  //  temp_val1 = (temp_msb1 << 8) | temp_lsb1;
-  //  temp_val_convert1 = ((temp_msb1 >> 7) & 1) ? (temp_val1 | ~((1 << 16) - 1)) : temp_val1;
-  //  temp1 = (((float)temp_val_convert1 - room_temp_offset)/(temp_sensitivity)) + 21.0;
-    
-  //  temp_val2 = (temp_msb2 << 8) | temp_lsb2;
-  //  temp_val_convert2 = ((temp_msb2 >> 7) & 1) ? (temp_val2 | ~((1 << 16) - 1)) : temp_val2;
-  //  temp2 = (((float)temp_val_convert2 - room_temp_offset)/(temp_sensitivity)) + 21.0;
-    
-  //  printf("Temp 1: %f,  Temp 2: %f \n", temp1, temp2);
-  //  delay_millis(TIM2, 100);
-
-  // // low pass filter
-  //  //float filtered_temp_val = filtered_temp_val - (beta * (filtered_temp_val - (float)temp_val))
-  //}
 
 }

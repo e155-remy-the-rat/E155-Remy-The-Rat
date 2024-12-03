@@ -59,6 +59,19 @@
     </folder>
     <folder Name="Source Files">
       <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc" />
+      <folder Name="Fusion">
+        <file file_name="../Fusion/Fusion.h" />
+        <file file_name="../Fusion/FusionAhrs.c" />
+        <file file_name="../Fusion/FusionAhrs.h" />
+        <file file_name="../Fusion/FusionAxes.h" />
+        <file file_name="../Fusion/FusionCalibration.h" />
+        <file file_name="../Fusion/FusionCompass.c" />
+        <file file_name="../Fusion/FusionCompass.h" />
+        <file file_name="../Fusion/FusionConvention.h" />
+        <file file_name="../Fusion/FusionMath.h" />
+        <file file_name="../Fusion/FusionOffset.c" />
+        <file file_name="../Fusion/FusionOffset.h" />
+      </folder>
       <folder Name="lib">
         <file file_name="../lib/ICM20948.c" />
         <file file_name="../lib/ICM20948.h" />

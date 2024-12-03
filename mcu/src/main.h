@@ -11,6 +11,7 @@
 #include "../lib/STM32L432KC.h"
 #include "../lib/MPU6050.h"
 #include "../lib/ICM20948.h"
+#include "../Fusion/Fusion.h"
 
 #define LED_PIN PB3 // LED pin for blinking on Port B pin 5
 #define BUFF_LEN 32
