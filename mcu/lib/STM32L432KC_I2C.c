@@ -122,7 +122,7 @@ void i2cRead(int address, uint8_t * RX_Buffer, int num_bytes) {
    // read in each byte desired
     for (int i = 0; i < num_bytes; i++) {
       while(!(I2C1->ISR & I2C_ISR_RXNE)); // wait until data is ready to be read
-      RX_Buffer[num_bytes - i - 1] = I2C1->RXDR;
+      RX_Buffer[i] = I2C1->RXDR;
     }
 
     //I2C1->CR2 |= I2C_CR2_STOP;

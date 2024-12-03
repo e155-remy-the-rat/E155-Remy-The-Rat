@@ -14,6 +14,11 @@
 #define ICM_ADDRESS1 0b1101001 // AD0 is logic high
 #define ICM_ADDRESS2 0b1101000 // AD0 is logic low
 
+#define RANGE_2G 0b00
+#define RANGE_4G 0b01
+#define RANGE_8G 0b10
+#define RANGE_16G 0b11
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Function prototypes
@@ -21,6 +26,7 @@
 
 void configICM(int address);
 void readTempICM(int address, uint8_t * temp_msb, uint8_t * temp_lsb);
-void readAccelZICM(int address, uint8_t * accelz_msb, uint8_t * accelz_lsb);
+void configAccelICM(int address, uint8_t dlpfcfg, uint8_t fs_sel);
+void readAccelICM(int address, uint8_t * accel);
 
 #endif

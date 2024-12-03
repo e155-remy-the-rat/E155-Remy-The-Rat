@@ -22,12 +22,25 @@ void readTempICM(int address, uint8_t * temp_msb, uint8_t * temp_lsb) {
     i2cRead(address, temp_lsb, 1);
 };
 
-void readAccelZICM(int address, uint8_t * accelz_msb, uint8_t * accelz_lsb) {
+void configAccelICM(int address, uint8_t dlpfcfg, uint8_t fs_sel) {
+  // set offset for z acceleration
   uint8_t za_offs[3] = {0x1A, 0x00, 0b00000000};
+  i2cWrite(address, za_offs, 3, 1);
 
-  int accel_smplrt_div = 0b00000000000;
-  uint8_t accel_smplrt[3] = {0x10, (accel_smplrt_div >> 8), 0x00};
+  // set sample rate divisor
+  uint8_t accel_smplrt[3] = {0x10, 0x00, 0x00};
+  i2cWrite(address, accel_smplrt, 3, 1);
 
-  // TODO: made all of the configuration bits constants and OR together configurations
-  uint8_t accel_config[2] = {0x14, 0b00100101};
+  // set low pass filtering properties
+  //uint8_t accel_dlp_config = 0b00000001 | (dlpfcfg << 3) | fs_sel << 1; 
+  //uint8_t accel_low_pass[2] = {0x14, accel_dlp_config};
+  //i2cWrite(address, accel_low_pass, 2, 1);
+};
+
+void readAccelICM(int address, uint8_t * accel) {
+    uint8_t read_accel = 0x2D;
+
+    // read all accel data
+    i2cWrite(address, &read_accel, 1, 0);
+    i2cRead(address, accel, 6);
 }
