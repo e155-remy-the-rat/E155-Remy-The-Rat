@@ -3,7 +3,7 @@
 
 #include "STM32L432KC_RCC.h"
 
-void configurePLL() {
+void configurePLL(void) {
    // Set clock to 64 MHz
    // Output freq = (src_clk) * (N/M) / P
    // (4 MHz) * (64/1) / 4  = 64 MHz
@@ -25,7 +25,7 @@ void configurePLL() {
    while(_FLD2VAL(RCC_CR_PLLRDY, RCC->CR) == 0);
 }
 
-void configureClock(){
+void configureClock(void){
   // Configure and turn on PLL
   configurePLL();
 

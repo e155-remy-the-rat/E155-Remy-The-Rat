@@ -29,10 +29,10 @@
 #define RANGE_8G_CONVERSION 4096
 #define RANGE_16G_CONVERSION 2048
 
-#define RANGE_250DPS_CONVERSION 250
-#define RANGE_500DPS_CONVERSION 500
-#define RANGE_1000DPS_CONVERSION 1000
-#define RANGE_2000DPS_CONVERSION 2000
+#define RANGE_250DPS_CONVERSION 131
+#define RANGE_500DPS_CONVERSION 65.5
+#define RANGE_1000DPS_CONVERSION 32.8
+#define RANGE_2000DPS_CONVERSION 16.4
 
 ///////////////////////////////////////////////////////////////////////////////
 // Function prototypes
