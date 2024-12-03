@@ -3,6 +3,7 @@
 
 #include "ICM20948.h"
 
+
 void configICM(int address) {
     // reset chip, clear sleep mode, enable accel and disable gyro
     uint8_t reset[3] = {0x06, 0b00000010, 0b00000111};
@@ -32,9 +33,9 @@ void configAccelICM(int address, uint8_t dlpfcfg, uint8_t fs_sel) {
   i2cWrite(address, accel_smplrt, 3, 1);
 
   // set low pass filtering properties
-  //uint8_t accel_dlp_config = 0b00000001 | (dlpfcfg << 3) | fs_sel << 1; 
-  //uint8_t accel_low_pass[2] = {0x14, accel_dlp_config};
-  //i2cWrite(address, accel_low_pass, 2, 1);
+  uint8_t accel_dlp_config = 0b00000001 | (dlpfcfg << 3) | fs_sel << 1; 
+  uint8_t accel_low_pass[2] = {0x14, accel_dlp_config};
+  i2cWrite(address, accel_low_pass, 2, 1);
 };
 
 void readAccelICM(int address, uint8_t * accel) {

@@ -19,6 +19,10 @@
 #define RANGE_8G 0b10
 #define RANGE_16G 0b11
 
+#define RANGE_2G_CONVERSION 16384
+#define RANGE_4G_CONVERSION 8192
+#define RANGE_8G_CONVERSION 4096
+#define RANGE_16G_CONVERSION 2048
 
 ///////////////////////////////////////////////////////////////////////////////
 // Function prototypes

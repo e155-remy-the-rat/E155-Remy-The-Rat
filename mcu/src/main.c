@@ -57,11 +57,11 @@ int main(void) {
   //i2cWrite(ICM_ADDRESS1, read_who_am_i, 1, 0);
   //i2cRead(ICM_ADDRESS1, who_am_i, 1);
 
-  configAccelICM(ICM_ADDRESS1, RANGE_4G, 0b00);
+  configAccelICM(ICM_ADDRESS1, 6, RANGE_2G);
+
   uint8_t accel_data[6] = {};
   uint16_t accelx_val, accely_val, accelz_val;
   float accelz, accely, accelx;
-
 
   while(1) {
     readAccelICM(ICM_ADDRESS1, accel_data);
@@ -74,9 +74,9 @@ int main(void) {
     accelz_val = (float)((accel_data[4] << 8) | accel_data[5]);
     accelz = (float) (((accel_data[4] >> 7) & 1) ? (accelz_val | ~((1 << 16) - 1)) : accelz_val);
 
-    accelx = accelx/8192.0;
-    accely = accely/8192.0;
-    accelz = accelz/8192.0;
+    accelx = accelx/RANGE_2G_CONVERSION;
+    accely = accely/RANGE_2G_CONVERSION;
+    accelz = accelz/RANGE_2G_CONVERSION;
 
     printf("AccelX: %f, AccelY: %f, AccelZ: %f \n", accelx, accely, accelz);
     delay_millis(TIM2, 100);
