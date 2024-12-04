@@ -22,5 +22,6 @@
 #define CS PB6
 #define SDA PA10
 #define SCL PA9
+#define CONFIG_BUTTON PB5
 
 #endif 
