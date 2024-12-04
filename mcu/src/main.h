@@ -14,12 +14,6 @@
 #include "../Fusion/Fusion.h"
 
 #define LED_PIN PB3 // LED pin for blinking on Port B pin 5
-#define BUFF_LEN 32
-#define SPI SPI1
-#define COPI PA12
-#define CIPO PB4
-#define SCK PA5
-#define CS PB6
 #define SDA PA10
 #define SCL PA9
 #define CONFIG_BUTTON PB5
