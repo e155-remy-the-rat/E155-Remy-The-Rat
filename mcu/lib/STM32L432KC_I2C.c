@@ -51,13 +51,15 @@ void i2cConfig(void) {
     I2C1->TIMINGR |= _VAL2FLD(I2C_TIMINGR_SCLH, 0x3);
     I2C1->TIMINGR |= _VAL2FLD(I2C_TIMINGR_SDADEL, 0x1);
     I2C1->TIMINGR |= _VAL2FLD(I2C_TIMINGR_SCLDEL, 0x3);
-    
-
-    // configure NOSTRETCH
-
 
     // set PE bit
     I2C1->CR1 |= I2C_CR1_PE;
+
+    // WHO AM I TEST 
+    //uint8_t read_who_am_i[1] = {0x00};
+    //uint8_t who_am_i[1];
+    //i2cWrite(ICM_ADDRESS1, read_who_am_i, 1, 0);
+    //i2cRead(ICM_ADDRESS1, who_am_i, 1);
 }
 
 void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {        
