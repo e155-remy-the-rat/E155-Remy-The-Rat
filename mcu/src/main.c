@@ -111,9 +111,9 @@ int main(void) {
   configureFlash();
   configureClock();
   RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
-  RCC->APB1ENR1 |= RCC_APB2ENR_TIM16EN;
+  RCC->APB1ENR1 |= RCC_APB1ENR1_TIM6EN;
   initTIM(TIM2);
-  initTIM(TIM16);
+  initTIM(TIM6);
 
   // Enable GPIO clock
   RCC->AHB2ENR |= (RCC_AHB2ENR_GPIOAEN | RCC_AHB2ENR_GPIOBEN | RCC_AHB2ENR_GPIOCEN);
@@ -131,15 +131,7 @@ int main(void) {
   //i2cWrite(ICM_ADDRESS1, read_who_am_i, 1, 0);
   //i2cRead(ICM_ADDRESS1, who_am_i, 1);
 
-  configAccelGyroICM(ICM_ADDRESS1, 6, 6, RANGE_2G, RANGE_250DPS);
-
-  //if (digitalRead(CONFIG_BUTTON)) {
-    //  for (int i = 0; i < num_config_vals; i++) {
-    //    collect_data(ICM_ADDRESS1, RANGE_2G_CONVERSION, RANGE_250DPS_CONVERSION, &accel_x, &accel_y, &accel_z, &gyro_x, &gyro_y, &gyro_z);
-
-        
-    //  }
-    //}
+  configAccelGyroICM(ICM_ADDRESS1, 1, 6, RANGE_2G, RANGE_250DPS);
 
   uint8_t raw_data[12] = {};
   float accel_z, accel_y, accel_x, gyro_z, gyro_y, gyro_x;
@@ -155,7 +147,7 @@ int main(void) {
   const FusionVector gyroscopeOffset = {gyro_x_offset, gyro_y_offset, gyro_z_offset};
   const FusionMatrix accelerometerMisalignment = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
   const FusionVector accelerometerSensitivity = {1.0/RANGE_2G_CONVERSION, 1.0/RANGE_2G_CONVERSION, 1.0/RANGE_2G_CONVERSION};
-  const FusionVector accelerometerOffset = {accel_x_offset, accel_y_offset, accel_z_offset};
+  const FusionVector accelerometerOffset = {0.0f, 0.0f, 0.0f};
 
 
   // Initialise algorithms
@@ -163,6 +155,7 @@ int main(void) {
   FusionAhrs ahrs;
 
   FusionOffsetInitialise(&offset, sample_rate);
+  //FusionBiasInitialize(
   FusionAhrsInitialise(&ahrs);
 
   // Set AHRS algorithm settings
@@ -175,17 +168,25 @@ int main(void) {
   };
   FusionAhrsSetSettings(&ahrs, &settings);
 
+  float speed = 0;
+  float position = 0;
+
 
   while(1) {
     collect_data(ICM_ADDRESS1, RANGE_2G_CONVERSION, RANGE_250DPS_CONVERSION, &accel_x, &accel_y, &accel_z, &gyro_x, &gyro_y, &gyro_z);
 
-    //printf("AccelX: %f, AccelY: %f, AccelZ: %f \n", accel_x, accel_y, accel_z);
-    printf("GyroX: %f, GyroY: %f, GyroZ: %f \n", gyro_x, gyro_y, gyro_z);
+    // apply configuration offsets
+    accel_x = accel_x - accel_x_offset;
+    accel_y = accel_y - accel_y_offset;
+    accel_z = accel_z - accel_z_offset + 1;
+    gyro_x = gyro_x - gyro_x_offset;
+    gyro_y = gyro_y - gyro_y_offset;
+    gyro_z = gyro_z - gyro_z_offset;
 
-    
+       
     // Acquire latest sensor data
-    const uint32_t counter = TIM16->CNT; // replace this with actual gyroscope timestamp
-    FusionVector gyroscope = {gyro_x - gyro_x_offset, gyro_y - gyro_y_offset, gyro_z - gyro_z_offset}; // replace this with actual gyroscope data in degrees/s
+    uint32_t counter = TIM6->CNT; // replace this with actual gyroscope timestamp
+    FusionVector gyroscope = {gyro_x, gyro_y, gyro_z}; // replace this with actual gyroscope data in degrees/s
     FusionVector accelerometer = {accel_x, accel_y, accel_z}; // replace this with actual accelerometer data in g
   
     //// Apply calibration
@@ -195,9 +196,10 @@ int main(void) {
     //// Update gyroscope offset correction algorithm
     //gyroscope = FusionOffsetUpdate(&offset, gyroscope);
 
-    //// Calculate delta time (in seconds) to account for gyroscope sample clock error
-    //const float delta_time = (float) (counter) * 0.001; // each counter count is a millisecond
-    //TIM16->CNT = 0;
+    // Calculate delta time (in seconds) to account for gyroscope sample clock error
+    const float delta_time = (float) (counter) * 0.001; // each counter count is a millisecond
+    TIM6->EGR |= 1;     // Force update
+    TIM6->SR &= ~(0x1); // Clear UIF
 
     // Update gyroscope AHRS algorithm
     FusionAhrsUpdateNoMagnetometer(&ahrs, gyroscope, accelerometer, 0.1);
@@ -206,17 +208,28 @@ int main(void) {
     const FusionEuler euler = FusionQuaternionToEuler(FusionAhrsGetQuaternion(&ahrs));
     const FusionVector earth = FusionAhrsGetEarthAcceleration(&ahrs);
 
-
-    printf("Roll %0.1f, Pitch %0.1f, Yaw %0.1f\n",
+    printf("GyroX: % f, GyroY: % f, GyroZ: % f \n", gyro_x, gyro_y, gyro_z);
+    printf("Roll % 0.1f, Pitch % 0.1f, Yaw % 0.1f\n",
             euler.angle.roll, euler.angle.pitch, euler.angle.yaw);
-    printf("AccelX: %f, AccelY: %f, AccelZ: %f \n", accel_x, accel_y, accel_z);
-    printf("X %0.1f, Y %0.1f, Z %0.1f\n\n",
+    printf("AccelX: % f, AccelY: % f, AccelZ: % f \n", accel_x, accel_y, accel_z);
+    printf("X % f, Y % f, Z % f\n\n",
             earth.axis.x, earth.axis.y, earth.axis.z);
-    //printf("Roll %0.1f, Pitch %0.1f, Yaw %0.1f, X %0.1f, Y %0.1f, Z %0.1f\n",
-    //        euler.angle.roll, euler.angle.pitch, euler.angle.yaw,
-    //        earth.axis.x, earth.axis.y, earth.axis.z);
+
+    speed = speed + earth.axis.z*delta_time;
+    position = position + speed*delta_time  + 0.5*earth.axis.z*delta_time*delta_time;
+    printf("Z Accel: % f, Z Vel: % f, Z Position: % f\n\n\n", earth.axis.z, speed, position);
 
 
+    //if ( position < 0) {
+    //  float gyro_x_rand, gyro_y_rand, gyro_z_rand, accel_x_rand, accel_y_rand;
+    //  position = 0; 
+    //  average_data(ICM_ADDRESS1, RANGE_2G_CONVERSION, RANGE_250DPS_CONVERSION, &accel_x_rand, &accel_y_rand, &accel_z_offset, &gyro_x_rand, &gyro_y_rand, &gyro_z_rand);
+    //  TIM6->EGR |= 1;     // Force update
+    //  TIM6->SR &= ~(0x1); // Clear UIF
+
+    //}
+
+    if 
 
     delay_millis(TIM2, delay_val);
   }
