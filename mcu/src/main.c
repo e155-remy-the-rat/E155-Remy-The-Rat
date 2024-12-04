@@ -1,29 +1,37 @@
-/** 
-    Main: Contains main function for I2C communication with the IMUs, filtering of data, 
-    and SPI communication with RF transmitter.
-    @file main.c
-    @author Marina Ring
-    @version 1.0 11/17/2024
-*/
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
-#include <stm32l432xx.h>
-#include "main.h"
 
-////////////////////////////////////////////////
-// Constants
-////////////////////////////////////////////////
+#include "lib/STM32L432KC_GPIO.h"
+#include "lib/STM32L432KC_RCC.h"
+#include "lib/STM32L432KC_FLASH.h"
+#include "lib/STM32L432KC_USART.h"
+#include "lib/STM32L432KC_TIM.h"
+#include "/Users/alishachulani/Desktop/E155-Remy-The-Rat-mcu/mcu/lib/ICM20948.h"
+#include "/Users/alishachulani/Desktop/E155-Remy-The-Rat-mcu/mcu/lib/MPU6050.h"
+#include "/Users/alishachulani/Desktop/E155-Remy-The-Rat-mcu/mcu/Fusion/Fusion.h"
 
-int delay_val = 100;
+
+#include "lib/STM32L432KC_SPI.h"
+
+#include "lib/nrf24.h"
+
+
+#define LED_PIN PB3 // LED pin for blinking on Port B pin 5
+#define BUFF_LEN 32
+#define SDA PA10
+#define SCL PA9
+#define CONFIG_BUTTON PB5
+
+uint8_t state_left, state_right;
+
+int delay_val = 2;
 int num_config_vals = 100;
 int gyro_range = RANGE_250DPS;
 int gyro_range_val = 250;
 float gyro_conversion = RANGE_250DPS_CONVERSION;
 int accel_range = RANGE_2G;
 float accel_conversion = RANGE_2G_CONVERSION;
-
-////////////////////////////////////////////////
-// Functions
-////////////////////////////////////////////////
 
 // Function used by printf to send characters to the laptop
 int _write(int file, char *ptr, int len) {
@@ -59,6 +67,7 @@ void collect_data(int address, float a_conversion, float g_conversion, float * a
   *gyro_z = i2c_val_to_float(raw_data[10], raw_data[11])/g_conversion;
 }
 
+
 // function used for calibration
 void average_data(int address, float a_conversion, float g_conversion, float * accel_x_offset, float * accel_y_offset, float * accel_z_offset, float * gyro_x_offset, float * gyro_y_offset, float * gyro_z_offset) {
   float accel_z[num_config_vals], accel_y[num_config_vals], accel_x[num_config_vals], gyro_z[num_config_vals], gyro_y[num_config_vals], gyro_x[num_config_vals];
@@ -77,7 +86,7 @@ void average_data(int address, float a_conversion, float g_conversion, float * a
   gx = 0;
   gy = 0;
   gz = 0;
-  
+
   for (int i = 0; i < num_config_vals; i++) {
     collect_data(address, a_conversion, g_conversion, &ax, &ay, &az, &gx, &gy, &gz);
 
@@ -107,11 +116,131 @@ void average_data(int address, float a_conversion, float g_conversion, float * a
 }
 
 
-////////////////////////////////////////////////
-// Main
-////////////////////////////////////////////////
 
-int main(void) {
+#define RP_1              PA2
+#define RP_2              PA7
+#define RP_3              PA6
+#define RP_4              PA5
+
+void updateRatState(uint8_t recievedState)
+{
+    digitalWrite(RP_1, (recievedState & (1 << 0)) ? 1 : 0); // Bit 0 -> RP_1
+    digitalWrite(RP_2, (recievedState & (1 << 1)) ? 1 : 0); // Bit 1 -> RP_2
+    digitalWrite(RP_3, (recievedState & (1 << 2)) ? 1 : 0); // Bit 2 -> RP_3
+    digitalWrite(RP_4, (recievedState & (1 << 3)) ? 1 : 0); // Bit 3 -> RP_4
+}
+
+
+uint8_t state = 0;
+void RX(void)
+{
+  uint8_t ADDR[] = { 'n', 'R', 'F', '2', '4' }; // the address for RX pipe
+  nRF24_DisableAA(0xFF); // disable ShockBurst
+  nRF24_SetRFChannel(90); // set RF channel to 2490MHz
+  nRF24_SetDataRate(nRF24_DR_2Mbps); // 2Mbit/s data rate
+  nRF24_SetCRCScheme(nRF24_CRC_1byte); // 1-byte CRC scheme
+  nRF24_SetAddrWidth(5); // address width is 5 bytes
+  nRF24_SetAddr(nRF24_PIPE1, ADDR); // program pipe address
+  nRF24_SetRXPipe(nRF24_PIPE1, nRF24_AA_OFF, 10); // enable RX pipe#1 with Auto-ACK: disabled, payload length: 10 bytes
+  nRF24_SetOperationalMode(nRF24_MODE_RX); // switch transceiver to the RX mode
+  nRF24_SetPowerMode(nRF24_PWR_UP); // wake-up transceiver (in case if it sleeping)
+  // then pull CE pin to HIGH, and the nRF24 will start a receive...
+
+  uint8_t nRF24_received_payload[32]; // buffer for payload
+  uint8_t payload_length; // variable to store a length of received payload
+  uint8_t pipe; // pipe number
+  nRF24_CE_H; // start receiving
+  while (1) {
+      // constantly poll the status of RX FIFO...
+      if (nRF24_GetStatus_RXFIFO() != nRF24_STATUS_RXFIFO_EMPTY) {
+          // the RX FIFO have some data, take a note what nRF24 can hold up to three payloads of 32 bytes...
+          pipe = nRF24_ReadPayload(nRF24_received_payload, &payload_length); // read a payload to buffer
+          nRF24_ClearIRQFlags(); // clear any pending IRQ bits
+          // now the nRF24_payload buffer holds received data
+          // payload_length variable holds a length of received data
+          // pipe variable holds a number of the pipe which has received the data
+          // ... do something with received data ...
+
+          // We assume the first byte in the payload contains the rat state to send to the fpga
+          updateRatState(nRF24_received_payload[0]);
+          for (volatile int i = 0; i < 10000000; i++); // Only update once a delay
+      }
+  }
+
+}
+
+
+int TX(void)
+{
+  uint8_t ADDR[] = { 'n', 'R', 'F', '2', '4' }; // the TX address
+  nRF24_DisableAA(0xFF); // disable ShockBurst
+  nRF24_SetRFChannel(90); // set RF channel to 2490MHz
+  nRF24_SetDataRate(nRF24_DR_2Mbps); // 2Mbit/s data rate
+  nRF24_SetCRCScheme(nRF24_CRC_1byte); // 1-byte CRC scheme
+  nRF24_SetAddrWidth(5); // address width is 5 bytes
+  nRF24_SetTXPower(nRF24_TXPWR_0dBm); // configure TX power
+  nRF24_SetAddr(nRF24_PIPETX, ADDR); // program TX address
+  nRF24_SetOperationalMode(nRF24_MODE_TX); // switch transceiver to the TX mode
+  nRF24_SetPowerMode(nRF24_PWR_UP); // wake-up transceiver (in case if it sleeping)
+  // the nRF24 is ready for transmission, upload a payload, then pull CE pin to HIGH and it will transmit a packet...
+
+  uint8_t status;
+  uint8_t pBuf[8] = {'h', 'e', 'l', 'l', 'o', '1', '2', '3'};
+
+  pBuf[0] = state_left + 8;
+  pBuf[1] = state_right + 8;
+
+  uint8_t length = 8;
+  nRF24_WritePayload(pBuf, length); // transfer payload data to transceiver
+  nRF24_CE_H; // assert CE pin (transmission starts)
+
+  while (1) {
+      status = nRF24_GetStatus();
+      if (status & (nRF24_FLAG_TX_DS | nRF24_FLAG_MAX_RT)) {
+          // transmission ended, exit loop
+          break;
+      }
+  }
+
+  nRF24_CE_L; // de-assert CE pin (nRF24 goes to StandBy-I mode)
+  nRF24_ClearIRQFlags(); // clear any pending IRQ flags
+  if (status & nRF24_FLAG_MAX_RT) {
+      // Auto retransmit counter exceeds the programmed maximum limit (payload in FIFO is not removed)
+      // Also the software can flush the TX FIFO here...
+      return 9;
+  }
+  if (status & nRF24_FLAG_TX_DS) {
+      // Successful transmission
+      return 1;
+  }
+  // In fact that should not happen
+  return 10;
+
+}
+
+
+
+ int main(void) {
+
+  GPIO_TypeDef * GPIO_PORT_PTR = gpioPinToBase(PB4);
+  int pin_offset = gpioPinOffset(PB4);
+  GPIO_PORT_PTR->PUPDR &= ~(0b11 << 8);
+  configureFlash();
+  configureClock();
+
+  gpioEnable(GPIO_PORT_A);
+  gpioEnable(GPIO_PORT_B);
+  gpioEnable(GPIO_PORT_C);
+
+
+  pinMode(RF_CE, GPIO_OUTPUT); 
+
+  pinMode(RP_1, GPIO_OUTPUT); 
+  pinMode(RP_2, GPIO_OUTPUT); 
+  pinMode(RP_3, GPIO_OUTPUT); 
+  pinMode(RP_4, GPIO_OUTPUT); 
+
+
   // variables
   uint8_t raw_data[12] = {};
 
@@ -122,11 +251,9 @@ int main(void) {
   float accel_z_offset_right, accel_y_offset_right, accel_x_offset_right, gyro_z_offset_right, gyro_y_offset_right, gyro_x_offset_right;
 
   int sample_rate = 1 / (delay_val * 0.001);
+ // int sample_rate = 1000;
 
-  uint8_t state_left, state_right;
-  //float speed = 0;
-  //float position = 0;
-
+  
 
   // Configure flash latency and set clock to run at 84 MHz
   configureFlash();
@@ -153,7 +280,6 @@ int main(void) {
   // configure acceleration/gyroscope readings
   configAccelGyroICM(ICM_ADDRESS1, 6, 6, accel_range, gyro_range);
   configAccelGyroICM(ICM_ADDRESS2, 6, 6, accel_range, gyro_range);
-
 
   // delay 10 seconds intially to allow user to hold sensors flat
   // onboard LED flashes while waiting
@@ -190,137 +316,129 @@ int main(void) {
   FusionAhrsSetSettings(&ahrs_left, &settings);
   FusionAhrsSetSettings(&ahrs_right, &settings);
 
+  initSPI(0b100, 0, 0);
 
-  while(1) {
-    // collect data
-    collect_data(ICM_ADDRESS1, accel_conversion, gyro_conversion, &accel_x_left, &accel_y_left, &accel_z_left, &gyro_x_left, &gyro_y_left, &gyro_z_left);
-    collect_data(ICM_ADDRESS2, accel_conversion, gyro_conversion, &accel_x_right, &accel_y_right, &accel_z_right, &gyro_x_right, &gyro_y_right, &gyro_z_right);
+  int i = delay_val - 1;
+  uint32_t counter = 0;
 
-    // apply configuration offsets
-    accel_x_left = accel_x_left - accel_x_offset_left;
-    accel_y_left = accel_y_left - accel_y_offset_left;
-    accel_z_left = accel_z_left - accel_z_offset_left + 1;
-    gyro_x_left = gyro_x_left - gyro_x_offset_left;
-    gyro_y_left = gyro_y_left - gyro_y_offset_left;
-    gyro_z_left = gyro_z_left - gyro_z_offset_left;
+  while (1) {
 
-    accel_x_right = accel_x_right - accel_x_offset_right;
-    accel_y_right = accel_y_right - accel_y_offset_right;
-    accel_z_right = accel_z_right - accel_z_offset_right + 1;
-    gyro_x_right = gyro_x_right - gyro_x_offset_right;
-    gyro_y_right = gyro_y_right - gyro_y_offset_right;
-    gyro_z_right = gyro_z_right - gyro_z_offset_right;
+    //RX(); // set this to either RX or TX and then upload to corresponding MCU
+    
+
+  //  if (state == 15) {
+  //    state = 0;
+  //  }
+  //  else {
+  //    state = state + 1;
+  //  }
+  //}
+
+      // collect data
+      collect_data(ICM_ADDRESS1, accel_conversion, gyro_conversion, &accel_x_left, &accel_y_left, &accel_z_left, &gyro_x_left, &gyro_y_left, &gyro_z_left);
+      collect_data(ICM_ADDRESS2, accel_conversion, gyro_conversion, &accel_x_right, &accel_y_right, &accel_z_right, &gyro_x_right, &gyro_y_right, &gyro_z_right);
+      
+      counter = TIM6->CNT;
+
+      // apply configuration offsets
+      accel_x_left = accel_x_left - accel_x_offset_left;
+      accel_y_left = accel_y_left - accel_y_offset_left;
+      accel_z_left = accel_z_left - accel_z_offset_left + 1;
+      gyro_x_left = gyro_x_left - gyro_x_offset_left;
+      gyro_y_left = gyro_y_left - gyro_y_offset_left;
+      gyro_z_left = gyro_z_left - gyro_z_offset_left;
+
+      accel_x_right = accel_x_right - accel_x_offset_right;
+      accel_y_right = accel_y_right - accel_y_offset_right;
+      accel_z_right = accel_z_right - accel_z_offset_right + 1;
+      gyro_x_right = gyro_x_right - gyro_x_offset_right;
+      gyro_y_right = gyro_y_right - gyro_y_offset_right;
+      gyro_z_right = gyro_z_right - gyro_z_offset_right;
 
        
-    // Acquire latest sensor data
-    //uint32_t counter = TIM6->CNT; // replace this with actual gyroscope timestamp
-    FusionVector gyroscope_left = {gyro_x_left, gyro_y_left, gyro_z_left}; // replace this with actual gyroscope data in degrees/s
-    FusionVector accelerometer_left = {accel_x_left, accel_y_left, accel_z_left}; // replace this with actual accelerometer data in g
-    FusionVector gyroscope_right = {gyro_x_right, gyro_y_right, gyro_z_right}; // replace this with actual gyroscope data in degrees/s
-    FusionVector accelerometer_right = {accel_x_right, accel_y_right, accel_z_right}; // replace this with actual accelerometer data in g
-  
+      // Acquire latest sensor data
+      //uint32_t counter = TIM6->CNT; // replace this with actual gyroscope timestamp
+      FusionVector gyroscope_left = {gyro_x_left, gyro_y_left, gyro_z_left}; // replace this with actual gyroscope data in degrees/s
+      FusionVector accelerometer_left = {accel_x_left, accel_y_left, accel_z_left}; // replace this with actual accelerometer data in g
+      FusionVector gyroscope_right = {gyro_x_right, gyro_y_right, gyro_z_right}; // replace this with actual gyroscope data in degrees/s
+      FusionVector accelerometer_right = {accel_x_right, accel_y_right, accel_z_right}; // replace this with actual accelerometer data in g
 
-    // Calculate delta time (in seconds) to account for gyroscope sample clock error
-    //const float delta_time = (float) (counter) * 0.001; // each counter count is a millisecond
-    //TIM6->EGR |= 1;     // Force update
-    //TIM6->SR &= ~(0x1); // Clear UIF
+      // Calculate delta time (in seconds) to account for gyroscope sample clock error
+      const float delta_time = (float) (counter) * 0.001; // each counter count is a millisecond
+      TIM6->EGR |= 1;     // Force update
+      TIM6->SR &= ~(0x1); // Clear UIF
 
-    // Update gyroscope AHRS algorithm
-    FusionAhrsUpdateNoMagnetometer(&ahrs_left, gyroscope_left, accelerometer_left, 0.1);
-    FusionAhrsUpdateNoMagnetometer(&ahrs_right, gyroscope_right, accelerometer_right, 0.1);
+      // Update gyroscope AHRS algorithm
+      FusionAhrsUpdateNoMagnetometer(&ahrs_left, gyroscope_left, accelerometer_left, delta_time);
+      FusionAhrsUpdateNoMagnetometer(&ahrs_right, gyroscope_right, accelerometer_right, delta_time);
 
-    // Print algorithm outputs
-    const FusionEuler euler_left = FusionQuaternionToEuler(FusionAhrsGetQuaternion(&ahrs_left));
-    const FusionVector earth_left = FusionAhrsGetEarthAcceleration(&ahrs_left);
+      // Print algorithm outputs
+      const FusionEuler euler_left = FusionQuaternionToEuler(FusionAhrsGetQuaternion(&ahrs_left));
+      const FusionVector earth_left = FusionAhrsGetEarthAcceleration(&ahrs_left);
 
-    const FusionEuler euler_right = FusionQuaternionToEuler(FusionAhrsGetQuaternion(&ahrs_right));
-    const FusionVector earth_right = FusionAhrsGetEarthAcceleration(&ahrs_right);
+      const FusionEuler euler_right = FusionQuaternionToEuler(FusionAhrsGetQuaternion(&ahrs_right));
+      const FusionVector earth_right = FusionAhrsGetEarthAcceleration(&ahrs_right);
 
 
-    // map angles of the left and right IMUs to states to send to motors
-    // mappings are assuming initialization at horizontal position
-    if (euler_left.angle.pitch >= 50.0) {
-      state_left = 0b00;
-    }
-    else if (euler_left.angle.pitch < 50.0 && euler_left.angle.pitch >= 15.0) {
-      state_left = 0b01;
-    }
-    else if (euler_left.angle.pitch < 15.0 && euler_left.angle.pitch >= -20.0) {
-      state_left = 0b10;
-    }
-    else {
-      state_left = 0b11;
-    }
+      // map angles of the left and right IMUs to states to send to motors
+      // mappings are assuming initialization at horizontal position
+      if (euler_left.angle.pitch >= 40.0) {
+        state_left = 0b00;
+      }
+      else if (euler_left.angle.pitch < 40.0 && euler_left.angle.pitch >= 0.0) {
+        state_left = 0b01;
+      }
+      else if (euler_left.angle.pitch < 0.0 && euler_left.angle.pitch >= -40.0) {
+        state_left = 0b10;
+      }
+      else {
+        state_left = 0b11;
+      }
 
-    if (euler_right.angle.pitch >= 50.0) { 
-      state_right = 0b11;
-    }
-    else if (euler_right.angle.pitch < 50.0 && euler_right.angle.pitch >= 15.0) {
-      state_right = 0b10;
-    }
-    else if (euler_left.angle.pitch < 15.0 && euler_left.angle.pitch >= -20.0) {
-      state_right = 0b01;
-    }
-    else {
-      state_right = 0b00;
-    }
 
-    // Print to monitor
-    printf("LEFT:\n");
-    printf("GyroX: % f, GyroY: % f, GyroZ: % f \n", gyro_x_left, gyro_y_left, gyro_z_left);
-    printf("Roll % 0.1f, Pitch % 0.1f, Yaw % 0.1f\n",
-            euler_left.angle.roll, euler_left.angle.pitch, euler_left.angle.yaw);
-    printf("State: %u\n\n", state_left);
 
-    //printf("RIGHT:\n");
-    //printf("GyroX: % f, GyroY: % f, GyroZ: % f \n", gyro_x_right, gyro_y_right, gyro_z_right);
-    //printf("Roll % 0.1f, Pitch % 0.1f, Yaw % 0.1f\n\n",
-    //        euler_right.angle.roll, euler_right.angle.pitch, euler_right.angle.yaw);
-    //printf("State: %u\n\n", state_right); 
+      if (euler_right.angle.pitch >= 40.0) { 
+        state_right = 0b11;
+      }
+      else if (euler_right.angle.pitch < 40.0 && euler_right.angle.pitch >= 0.0) {
+        state_right = 0b10;
+      }
+      else if (euler_right.angle.pitch < 0.0 && euler_right.angle.pitch >= -40.0) {
+        state_right = 0b01;
+      }
+      else {
+        state_right = 0b00;
+      }
 
-    //printf("AccelX: % f, AccelY: % f, AccelZ: % f \n", accel_x, accel_y, accel_z);
-    //printf("X % f, Y % f, Z % f\n\n",
-    //        earth.axis.x, earth.axis.y, earth.axis.z);
+      // Print to monitor
+      printf("LEFT:\n");
+      printf("GyroX: % f, GyroY: % f, GyroZ: % f \n", gyro_x_left, gyro_y_left, gyro_z_left);
+      printf("Roll % 0.1f, Pitch % 0.1f, Yaw % 0.1f\n",
+              euler_left.angle.roll, euler_left.angle.pitch, euler_left.angle.yaw);
+      printf("State: %u\n\n", state_left);
+
+      // Print to monitor
+      printf("RIGHT:\n");
+      printf("GyroX: % f, GyroY: % f, GyroZ: % f \n", gyro_x_right, gyro_y_right, gyro_z_right);
+      printf("Roll % 0.1f, Pitch % 0.1f, Yaw % 0.1f\n",
+              euler_right.angle.roll, euler_right.angle.pitch, euler_right.angle.yaw);
+      printf("State: %u\n\n\n", state_right);
+
+      //i = 0;
+    //}
+
+    //i++;
 
 
     // delay for readability
-    delay_millis(TIM2, delay_val);
+    //delay_millis(TIM2, 1);
+
+    state = (state_left<<2) | state_right; 
+
+
+  
+    TX();
+  
   }
 
 }
-
-
-
-//-- CODE GRAVEYARD --//
-
-
-  //// Define calibration (replace with actual calibration data if available)
-  //const FusionMatrix gyroscopeMisalignment = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-  //const FusionVector gyroscopeSensitivity = {1.0/RANGE_250DPS_CONVERSION, 1.0/RANGE_250DPS_CONVERSION, 1.0/RANGE_250DPS_CONVERSION}; //in dps per lsb
-  //const FusionVector gyroscopeOffset = {gyro_x_offset, gyro_y_offset, gyro_z_offset};
-  //const FusionMatrix accelerometerMisalignment = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-  //const FusionVector accelerometerSensitivity = {1.0/RANGE_2G_CONVERSION, 1.0/RANGE_2G_CONVERSION, 1.0/RANGE_2G_CONVERSION};
-  //const FusionVector accelerometerOffset = {0.0f, 0.0f, 0.0f};
-
-
-  //// Apply calibration
-    //gyroscope = FusionCalibrationInertial(gyroscope, gyroscopeMisalignment, gyroscopeSensitivity, gyroscopeOffset);
-    //accelerometer = FusionCalibrationInertial(accelerometer, accelerometerMisalignment, accelerometerSensitivity, accelerometerOffset);
-   
-    //// Update gyroscope offset correction algorithm
-    //gyroscope = FusionOffsetUpdate(&offset, gyroscope);
-
-
-        //speed = speed + earth.axis.z*delta_time;
-    //position = position + speed*delta_time  + 0.5*earth.axis.z*delta_time*delta_time;
-    //printf("Z Accel: % f, Z Vel: % f, Z Position: % f\n\n\n", earth.axis.z, speed, position);
-
-    //if ( position < 0) {
-    //  float gyro_x_rand, gyro_y_rand, gyro_z_rand, accel_x_rand, accel_y_rand;
-    //  position = 0; 
-    //  average_data(ICM_ADDRESS1, RANGE_2G_CONVERSION, RANGE_250DPS_CONVERSION, &accel_x_rand, &accel_y_rand, &accel_z_offset, &gyro_x_rand, &gyro_y_rand, &gyro_z_rand);
-    //  TIM6->EGR |= 1;     // Force update
-    //  TIM6->SR &= ~(0x1); // Clear UIF
-
-    //}
-
