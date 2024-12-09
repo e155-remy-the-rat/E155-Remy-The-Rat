@@ -1,0 +1,1660 @@
+Lattice Timing Report -  Setup  and Hold, Version Radiant Software (64-bit) 2023.1.0.43.3
+
+Wed Nov 27 13:14:22 2024
+
+Copyright (c) 1991-1994 by NeoCAD Inc. All rights reserved.
+Copyright (c) 1995 AT&T Corp.   All rights reserved.
+Copyright (c) 1995-2001 Lucent Technologies Inc.  All rights reserved.
+Copyright (c) 2001 Agere Systems   All rights reserved.
+Copyright (c) 2002-2023 Lattice Semiconductor Corporation,  All rights reserved.
+
+Command line:    timing -sethld -v 10 -u 10 -endpoints 10 -nperend 1 -sp High-Performance_1.2V -hsp m -pwrprd -html -rpt motor_control_impl_1.twr motor_control_impl_1.udb -gui
+
+-----------------------------------------
+Design:          top
+Family:          iCE40UP
+Device:          iCE40UP5K
+Package:         SG48
+Performance:     High-Performance_1.2V
+Package Status:                     Preliminary    Version 1.5
+**Performance Hardware Data Status :   Advanced Version 1.0
+-----------------------------------------
+
+
+=====================================================================
+                    Table of Contents
+=====================================================================
+    1  DESIGN CHECKING
+        1.1  SDC Constraints
+        1.2  Constraint Coverage
+        1.3  Overall Summary
+        1.4  Unconstrained Report
+        1.5  Combinational Loop
+    2  Setup at Speed Grade High-Performance_1.2V Corner at 100 Degrees
+        2.1  Clock Summary
+        2.2  Endpoint slacks
+        2.3  Detailed Report
+    3  Hold at Speed Grade m Corner at -40 Degrees
+        3.1  Endpoint slacks
+        3.2  Detailed Report
+
+=====================================================================
+                    End of Table of Contents
+=====================================================================
+
+==============================================
+1  DESIGN CHECKING
+==============================================
+
+1.1  SDC Constraints
+=====================
+create_clock -name {clk} -period 83.3333 [get_pins {hf_osc/CLKHF }] 
+
+1.2  Constraint Coverage
+---------------------------
+Constraint Coverage: 86.4%
+
+
+1.3  Overall Summary
+---------------------------
+ Setup at Speed Grade High-Performance_1.2V Corner at 100 Degrees     Timing Errors: 0 endpoints;  Total Negative Slack: 0.000 ns 
+ Hold at Speed Grade m Corner at -40 Degrees                          Timing Errors: 0 endpoints;  Total Negative Slack: 0.000 ns 
+
+1.4  Unconstrained Report
+===========================
+
+1.4.1  Unconstrained Start/End Points
+--------------------------------------
+
+Clocked but unconstrained timing start points
+-------------------------------------------------------------------
+         Listing 2 Start Points         |           Type           
+-------------------------------------------------------------------
+motor2/pwm_out_c_1_I_0/Q                |          No required time
+motor1/pwm_out_c_0_I_0/Q                |          No required time
+-------------------------------------------------------------------
+                                        |                          
+Number of unconstrained timing start po |                          
+ints                                    |                         2
+                                        |                          
+-------------------------------------------------------------------
+
+Clocked but unconstrained timing end points
+-------------------------------------------------------------------
+         Listing 10 End Points          |           Type           
+-------------------------------------------------------------------
+motor2/counter_15__I_30/SR              |           No arrival time
+motor2/counter_15__I_0/SR               |           No arrival time
+{motor2/counter_15__I_17/SR   motor2/counter_15__I_16/SR}                           
+                                        |           No arrival time
+{motor2/counter_15__I_19/SR   motor2/counter_15__I_18/SR}                           
+                                        |           No arrival time
+{motor2/counter_15__I_21/SR   motor2/counter_15__I_20/SR}                           
+                                        |           No arrival time
+{motor2/counter_15__I_23/SR   motor2/counter_15__I_22/SR}                           
+                                        |           No arrival time
+{motor2/counter_15__I_25/SR   motor2/counter_15__I_24/SR}                           
+                                        |           No arrival time
+{motor2/counter_15__I_27/SR   motor2/counter_15__I_26/SR}                           
+                                        |           No arrival time
+{motor2/counter_15__I_29/SR   motor2/counter_15__I_28/SR}                           
+                                        |           No arrival time
+{motor1/counter_15__I_14/SR   motor1/counter_15__I_13/SR}                           
+                                        |           No arrival time
+-------------------------------------------------------------------
+                                        |                          
+Number of unconstrained timing end poin |                          
+ts                                      |                        19
+                                        |                          
+-------------------------------------------------------------------
+
+1.4.2  Start/End Points Without Timing Constraints
+---------------------------------------------------
+
+I/O ports without constraint
+----------------------------
+Possible constraints to use on I/O ports are:
+set_input_delay,
+set_output_delay,
+set_max_delay,
+create_clock,
+create_generated_clock,
+...
+
+-------------------------------------------------------------------
+     Listing 7 Start or End Points      |           Type           
+-------------------------------------------------------------------
+instate[1]                              |                     input
+instate[0]                              |                     input
+instate[3]                              |                     input
+instate[2]                              |                     input
+rst_n                                   |                     input
+pwm_out[0]                              |                    output
+pwm_out[1]                              |                    output
+-------------------------------------------------------------------
+                                        |                          
+Number of I/O ports without constraint  |                         7
+                                        |                          
+-------------------------------------------------------------------
+
+Nets without clock definition
+Define a clock on a top level port or a generated clock on a clock divider pin associated with this net(s).
+--------------------------------------------------
+There is no instance satisfying reporting criteria
+
+
+
+1.5  Combinational Loop
+========================
+None
+
+===============================================================
+2  Setup at Speed Grade High-Performance_1.2V Corner at 100 Degrees
+===============================================================
+
+2.1  Clock Summary
+=======================
+
+2.1.1 Clock "clk"
+=======================
+create_clock -name {clk} -period 83.3333 [get_pins {hf_osc/CLKHF }] 
+
+Single Clock Domain
+-------------------------------------------------------------------------------------------------------
+               Clock clk                |                    |       Period       |     Frequency      
+-------------------------------------------------------------------------------------------------------
+ From clk                               |             Target |          83.333 ns |         12.000 MHz 
+                                        | Actual (all paths) |          20.792 ns |         48.095 MHz 
+hf_osc/CLKHF (MPW)                      |   (50% duty cycle) |          20.792 ns |         48.095 MHz 
+-------------------------------------------------------------------------------------------------------
+
+Clock Domain Crossing
+
+2.2  Endpoint slacks
+=======================
+-------------------------------------------------------
+          Listing 10 End Points          |    Slack    
+-------------------------------------------------------
+motor1/pwm_out_c_0_I_0/D                 |   63.362 ns 
+motor2/pwm_out_c_1_I_0/D                 |   66.309 ns 
+motor1/counter_15__I_0/D                 |   73.257 ns 
+motor2/counter_15__I_0/D                 |   73.257 ns 
+motor1/counter_15__I_1/D                 |   74.089 ns 
+motor2/counter_15__I_16/D                |   74.089 ns 
+motor1/counter_15__I_2/D                 |   74.366 ns 
+motor2/counter_15__I_17/D                |   74.366 ns 
+motor1/counter_15__I_3/D                 |   74.643 ns 
+motor2/counter_15__I_18/D                |   74.643 ns 
+-------------------------------------------------------
+                                         |             
+Setup # of endpoints with negative slack:|           0 
+                                         |             
+-------------------------------------------------------
+
+2.3  Detailed Report
+=======================
+
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Detail report of critical paths
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                    Detailed Report for timing paths 
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ ++++Path 1  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin       : motor1/counter_15__I_6/Q  (SLICE_R16C19B)
+Path End         : motor1/pwm_out_c_0_I_0/D  (SLICE_R15C20C)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 8
+Delay Ratio      : 76.8% (route), 23.2% (logic)
+Clock Skew       : 0.000 ns 
+Setup Constraint : 83.333 ns 
+Path Slack       : 63.362 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  --------  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY       0.000                  0.000  20      
+motor1/clk                                                   NET DELAY           5.499                  5.499  20      
+{motor1/counter_15__I_6/CK   motor1/counter_15__I_5/CK}
+                                                                                 0.000                  5.499  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  --------  ---------------------  ------  
+motor1/counter_15__I_6/CK->motor1/counter_15__I_6/Q
+                                          SLICE_R16C19B      CLK_TO_Q0_DELAY     1.388                  6.887  3       
+motor1/counter[9]                                            NET DELAY           2.022                  8.909  3       
+motor1/i1_3_lut/A->motor1/i1_3_lut/Z      SLICE_R17C18C      C0_TO_F0_DELAY      0.449                  9.358  2       
+motor1/n985                                                  NET DELAY           2.485                 11.843  2       
+motor1/i2_4_lut/C->motor1/i2_4_lut/Z      SLICE_R17C19A      B1_TO_F1_DELAY      0.476                 12.319  1       
+motor1/n1086                                                 NET DELAY           0.304                 12.623  1       
+motor1/i41_3_lut/A->motor1/i41_3_lut/Z    SLICE_R17C19B      C0_TO_F0_DELAY      0.449                 13.072  2       
+motor1/n38                                                   NET DELAY           2.168                 15.240  2       
+motor1/LessThan_12_i24_4_lut/C->motor1/LessThan_12_i24_4_lut/Z
+                                          SLICE_R17C18B      D1_TO_F1_DELAY      0.449                 15.689  1       
+motor1/n24                                                   NET DELAY           2.763                 18.452  1       
+motor1/LessThan_12_i26_4_lut/A->motor1/LessThan_12_i26_4_lut/Z
+                                          SLICE_R17C19C      D1_TO_F1_DELAY      0.449                 18.901  1       
+motor1/n26                                                   NET DELAY           2.168                 21.069  1       
+motor1/LessThan_12_i28_3_lut_4_lut/D->motor1/LessThan_12_i28_3_lut_4_lut/Z
+                                          SLICE_R17C19D      D1_TO_F1_DELAY      0.449                 21.518  1       
+motor1/n28                                                   NET DELAY           3.278                 24.796  1       
+motor1/i479_4_lut/A->motor1/i479_4_lut/Z  SLICE_R15C20C      D1_TO_F1_DELAY      0.476                 25.272  1       
+motor1/pwm_out_c_0_N_67                                      NET DELAY           0.000                 25.272  1       
+motor1/pwm_out_c_0_I_0/D                                                         0.000                 25.272  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  --------  ---------------------  ------  
+                                                             CONSTRAINT          0.000                 83.333  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY       0.000                 83.333  20      
+motor1/clk                                                   NET DELAY           5.499                 88.832  20      
+{motor2/pwm_out_c_1_I_0/CK   motor1/pwm_out_c_0_I_0/CK}
+                                                                                 0.000                 88.832  1       
+                                                             Uncertainty      -(0.000)                 88.832  
+                                                             Setup time       -(0.198)                 88.634  
+----------------------------------------  -----------------  ---------------  --------  ---------------------  ------  
+Required Time                                                                                          88.634  
+Arrival Time                                                                                        -(25.271)  
+----------------------------------------  -----------------  ---------------  --------  ---------------------  ------  
+Path Slack  (Passed)                                                                                   63.362  
+
+
+
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_21/Q  (SLICE_R14C19B)
+Path End         : motor2/pwm_out_c_1_I_0/D  (SLICE_R15C20C)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 8
+Delay Ratio      : 72.6% (route), 27.4% (logic)
+Clock Skew       : 0.000 ns 
+Setup Constraint : 83.333 ns 
+Path Slack       : 66.309 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  --------  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY       0.000                  0.000  20      
+motor1/clk                                                   NET DELAY           5.499                  5.499  20      
+{motor2/counter_15__I_21/CK   motor2/counter_15__I_20/CK}
+                                                                                 0.000                  5.499  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  --------  ---------------------  ------  
+motor2/counter_15__I_21/CK->motor2/counter_15__I_21/Q
+                                          SLICE_R14C19B      CLK_TO_Q0_DELAY     1.388                  6.887  3       
+motor2/counter[9]                                            NET DELAY           2.022                  8.909  3       
+motor2/i1_3_lut/A->motor2/i1_3_lut/Z      SLICE_R15C18D      C1_TO_F1_DELAY      0.449                  9.358  2       
+motor2/n987                                                  NET DELAY           2.485                 11.843  2       
+motor2/i2_4_lut/C->motor2/i2_4_lut/Z      SLICE_R15C19A      B1_TO_F1_DELAY      0.476                 12.319  1       
+motor2/n1083                                                 NET DELAY           0.304                 12.623  1       
+motor2/i47_3_lut/A->motor2/i47_3_lut/Z    SLICE_R15C19B      C0_TO_F0_DELAY      0.449                 13.072  2       
+motor2/n44                                                   NET DELAY           2.168                 15.240  2       
+motor2/LessThan_12_i24_4_lut/C->motor2/LessThan_12_i24_4_lut/Z
+                                          SLICE_R15C18B      D1_TO_F1_DELAY      0.449                 15.689  1       
+motor2/n24                                                   NET DELAY           2.763                 18.452  1       
+motor2/LessThan_12_i26_4_lut/A->motor2/LessThan_12_i26_4_lut/Z
+                                          SLICE_R15C19C      D1_TO_F1_DELAY      0.476                 18.928  1       
+motor2/n26                                                   NET DELAY           0.304                 19.232  1       
+motor2/LessThan_12_i28_3_lut_4_lut/D->motor2/LessThan_12_i28_3_lut_4_lut/Z
+                                          SLICE_R15C19D      C0_TO_F0_DELAY      0.449                 19.681  1       
+motor2/n28                                                   NET DELAY           2.168                 21.849  1       
+motor2/i487_4_lut/A->motor2/i487_4_lut/Z  SLICE_R15C20C      D0_TO_F0_DELAY      0.476                 22.325  1       
+motor2/pwm_out_c_1_N_65                                      NET DELAY           0.000                 22.325  1       
+motor2/pwm_out_c_1_I_0/D                                                         0.000                 22.325  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  --------  ---------------------  ------  
+                                                             CONSTRAINT          0.000                 83.333  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY       0.000                 83.333  20      
+motor1/clk                                                   NET DELAY           5.499                 88.832  20      
+{motor2/pwm_out_c_1_I_0/CK   motor1/pwm_out_c_0_I_0/CK}
+                                                                                 0.000                 88.832  1       
+                                                             Uncertainty      -(0.000)                 88.832  
+                                                             Setup time       -(0.198)                 88.634  
+----------------------------------------  -----------------  ---------------  --------  ---------------------  ------  
+Required Time                                                                                          88.634  
+Arrival Time                                                                                        -(22.324)  
+----------------------------------------  -----------------  ---------------  --------  ---------------------  ------  
+Path Slack  (Passed)                                                                                   66.309  
+
+
+
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor1/counter_15__I_15/Q  (SLICE_R16C18A)
+Path End         : motor1/counter_15__I_0/D  (SLICE_R16C20A)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 17
+Delay Ratio      : 38.4% (route), 61.6% (logic)
+Clock Skew       : 0.000 ns 
+Setup Constraint : 83.333 ns 
+Path Slack       : 73.257 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                  0.000  20      
+motor1/clk                                                   NET DELAY               5.499                  5.499  20      
+motor1/counter_15__I_15/CK                                                           0.000                  5.499  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+motor1/counter_15__I_15/CK->motor1/counter_15__I_15/Q
+                                          SLICE_R16C18A      CLK_TO_Q1_DELAY         1.388                  6.887  1       
+motor1/counter[0]                                            NET DELAY               2.022                  8.909  1       
+motor1/counter_5_add_4_1/C1->motor1/counter_5_add_4_1/CO1
+                                          SLICE_R16C18A      C1_TO_COUT1_DELAY       0.343                  9.252  2       
+motor1/n855                                                  NET DELAY               0.000                  9.252  2       
+motor1/counter_5_add_4_3/CI0->motor1/counter_5_add_4_3/CO0
+                                          SLICE_R16C18B      CIN0_TO_COUT0_DELAY     0.277                  9.529  2       
+motor1/n1447                                                 NET DELAY               0.000                  9.529  2       
+motor1/counter_5_add_4_3/CI1->motor1/counter_5_add_4_3/CO1
+                                          SLICE_R16C18B      CIN1_TO_COUT1_DELAY     0.277                  9.806  2       
+motor1/n857                                                  NET DELAY               0.000                  9.806  2       
+motor1/counter_5_add_4_5/CI0->motor1/counter_5_add_4_5/CO0
+                                          SLICE_R16C18C      CIN0_TO_COUT0_DELAY     0.277                 10.083  2       
+motor1/n1468                                                 NET DELAY               0.000                 10.083  2       
+motor1/counter_5_add_4_5/CI1->motor1/counter_5_add_4_5/CO1
+                                          SLICE_R16C18C      CIN1_TO_COUT1_DELAY     0.277                 10.360  2       
+motor1/n859                                                  NET DELAY               0.000                 10.360  2       
+motor1/counter_5_add_4_7/CI0->motor1/counter_5_add_4_7/CO0
+                                          SLICE_R16C18D      CIN0_TO_COUT0_DELAY     0.277                 10.637  2       
+motor1/n1480                                                 NET DELAY               0.000                 10.637  2       
+motor1/counter_5_add_4_7/CI1->motor1/counter_5_add_4_7/CO1
+                                          SLICE_R16C18D      CIN1_TO_COUT1_DELAY     0.277                 10.914  2       
+motor1/n861                                                  NET DELAY               0.555                 11.469  2       
+motor1/counter_5_add_4_9/CI0->motor1/counter_5_add_4_9/CO0
+                                          SLICE_R16C19A      CIN0_TO_COUT0_DELAY     0.277                 11.746  2       
+motor1/n1483                                                 NET DELAY               0.000                 11.746  2       
+motor1/counter_5_add_4_9/CI1->motor1/counter_5_add_4_9/CO1
+                                          SLICE_R16C19A      CIN1_TO_COUT1_DELAY     0.277                 12.023  2       
+motor1/n863                                                  NET DELAY               0.000                 12.023  2       
+motor1/counter_5_add_4_11/CI0->motor1/counter_5_add_4_11/CO0
+                                          SLICE_R16C19B      CIN0_TO_COUT0_DELAY     0.277                 12.300  2       
+motor1/n1486                                                 NET DELAY               0.000                 12.300  2       
+motor1/counter_5_add_4_11/CI1->motor1/counter_5_add_4_11/CO1
+                                          SLICE_R16C19B      CIN1_TO_COUT1_DELAY     0.277                 12.577  2       
+motor1/n865                                                  NET DELAY               0.000                 12.577  2       
+motor1/counter_5_add_4_13/CI0->motor1/counter_5_add_4_13/CO0
+                                          SLICE_R16C19C      CIN0_TO_COUT0_DELAY     0.277                 12.854  2       
+motor1/n1489                                                 NET DELAY               0.000                 12.854  2       
+motor1/counter_5_add_4_13/CI1->motor1/counter_5_add_4_13/CO1
+                                          SLICE_R16C19C      CIN1_TO_COUT1_DELAY     0.277                 13.131  2       
+motor1/n867                                                  NET DELAY               0.000                 13.131  2       
+motor1/counter_5_add_4_15/CI0->motor1/counter_5_add_4_15/CO0
+                                          SLICE_R16C19D      CIN0_TO_COUT0_DELAY     0.277                 13.408  2       
+motor1/n1492                                                 NET DELAY               0.000                 13.408  2       
+motor1/counter_5_add_4_15/CI1->motor1/counter_5_add_4_15/CO1
+                                          SLICE_R16C19D      CIN1_TO_COUT1_DELAY     0.277                 13.685  2       
+motor1/n869                                                  NET DELAY               1.216                 14.901  2       
+motor1/counter_5_add_4_17/D0->motor1/counter_5_add_4_17/S0
+                                          SLICE_R16C20A      D0_TO_F0_DELAY          0.476                 15.377  1       
+motor1/counter_15__N_1[15]                                   NET DELAY               0.000                 15.377  1       
+motor1/counter_15__I_0/D                                                             0.000                 15.377  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+                                                             CONSTRAINT              0.000                 83.333  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                 83.333  20      
+motor1/clk                                                   NET DELAY               5.499                 88.832  20      
+motor1/counter_15__I_0/CK                                                            0.000                 88.832  1       
+                                                             Uncertainty          -(0.000)                 88.832  
+                                                             Setup time           -(0.198)                 88.634  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Required Time                                                                                              88.634  
+Arrival Time                                                                                            -(15.376)  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Path Slack  (Passed)                                                                                       73.257  
+
+
+
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_30/Q  (SLICE_R14C18A)
+Path End         : motor2/counter_15__I_0/D  (SLICE_R14C20A)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 17
+Delay Ratio      : 38.4% (route), 61.6% (logic)
+Clock Skew       : 0.000 ns 
+Setup Constraint : 83.333 ns 
+Path Slack       : 73.257 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                  0.000  20      
+motor1/clk                                                   NET DELAY               5.499                  5.499  20      
+motor2/counter_15__I_30/CK                                                           0.000                  5.499  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+motor2/counter_15__I_30/CK->motor2/counter_15__I_30/Q
+                                          SLICE_R14C18A      CLK_TO_Q1_DELAY         1.388                  6.887  1       
+motor2/counter[0]                                            NET DELAY               2.022                  8.909  1       
+motor2/counter_6_add_4_1/C1->motor2/counter_6_add_4_1/CO1
+                                          SLICE_R14C18A      C1_TO_COUT1_DELAY       0.343                  9.252  2       
+motor2/n838                                                  NET DELAY               0.000                  9.252  2       
+motor2/counter_6_add_4_3/CI0->motor2/counter_6_add_4_3/CO0
+                                          SLICE_R14C18B      CIN0_TO_COUT0_DELAY     0.277                  9.529  2       
+motor2/n1453                                                 NET DELAY               0.000                  9.529  2       
+motor2/counter_6_add_4_3/CI1->motor2/counter_6_add_4_3/CO1
+                                          SLICE_R14C18B      CIN1_TO_COUT1_DELAY     0.277                  9.806  2       
+motor2/n840                                                  NET DELAY               0.000                  9.806  2       
+motor2/counter_6_add_4_5/CI0->motor2/counter_6_add_4_5/CO0
+                                          SLICE_R14C18C      CIN0_TO_COUT0_DELAY     0.277                 10.083  2       
+motor2/n1456                                                 NET DELAY               0.000                 10.083  2       
+motor2/counter_6_add_4_5/CI1->motor2/counter_6_add_4_5/CO1
+                                          SLICE_R14C18C      CIN1_TO_COUT1_DELAY     0.277                 10.360  2       
+motor2/n842                                                  NET DELAY               0.000                 10.360  2       
+motor2/counter_6_add_4_7/CI0->motor2/counter_6_add_4_7/CO0
+                                          SLICE_R14C18D      CIN0_TO_COUT0_DELAY     0.277                 10.637  2       
+motor2/n1459                                                 NET DELAY               0.000                 10.637  2       
+motor2/counter_6_add_4_7/CI1->motor2/counter_6_add_4_7/CO1
+                                          SLICE_R14C18D      CIN1_TO_COUT1_DELAY     0.277                 10.914  2       
+motor2/n844                                                  NET DELAY               0.555                 11.469  2       
+motor2/counter_6_add_4_9/CI0->motor2/counter_6_add_4_9/CO0
+                                          SLICE_R14C19A      CIN0_TO_COUT0_DELAY     0.277                 11.746  2       
+motor2/n1462                                                 NET DELAY               0.000                 11.746  2       
+motor2/counter_6_add_4_9/CI1->motor2/counter_6_add_4_9/CO1
+                                          SLICE_R14C19A      CIN1_TO_COUT1_DELAY     0.277                 12.023  2       
+motor2/n846                                                  NET DELAY               0.000                 12.023  2       
+motor2/counter_6_add_4_11/CI0->motor2/counter_6_add_4_11/CO0
+                                          SLICE_R14C19B      CIN0_TO_COUT0_DELAY     0.277                 12.300  2       
+motor2/n1465                                                 NET DELAY               0.000                 12.300  2       
+motor2/counter_6_add_4_11/CI1->motor2/counter_6_add_4_11/CO1
+                                          SLICE_R14C19B      CIN1_TO_COUT1_DELAY     0.277                 12.577  2       
+motor2/n848                                                  NET DELAY               0.000                 12.577  2       
+motor2/counter_6_add_4_13/CI0->motor2/counter_6_add_4_13/CO0
+                                          SLICE_R14C19C      CIN0_TO_COUT0_DELAY     0.277                 12.854  2       
+motor2/n1471                                                 NET DELAY               0.000                 12.854  2       
+motor2/counter_6_add_4_13/CI1->motor2/counter_6_add_4_13/CO1
+                                          SLICE_R14C19C      CIN1_TO_COUT1_DELAY     0.277                 13.131  2       
+motor2/n850                                                  NET DELAY               0.000                 13.131  2       
+motor2/counter_6_add_4_15/CI0->motor2/counter_6_add_4_15/CO0
+                                          SLICE_R14C19D      CIN0_TO_COUT0_DELAY     0.277                 13.408  2       
+motor2/n1474                                                 NET DELAY               0.000                 13.408  2       
+motor2/counter_6_add_4_15/CI1->motor2/counter_6_add_4_15/CO1
+                                          SLICE_R14C19D      CIN1_TO_COUT1_DELAY     0.277                 13.685  2       
+motor2/n852                                                  NET DELAY               1.216                 14.901  2       
+motor2/counter_6_add_4_17/D0->motor2/counter_6_add_4_17/S0
+                                          SLICE_R14C20A      D0_TO_F0_DELAY          0.476                 15.377  1       
+motor2/counter_15__N_33[15]                                  NET DELAY               0.000                 15.377  1       
+motor2/counter_15__I_0/D                                                             0.000                 15.377  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+                                                             CONSTRAINT              0.000                 83.333  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                 83.333  20      
+motor1/clk                                                   NET DELAY               5.499                 88.832  20      
+motor2/counter_15__I_0/CK                                                            0.000                 88.832  1       
+                                                             Uncertainty          -(0.000)                 88.832  
+                                                             Setup time           -(0.198)                 88.634  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Required Time                                                                                              88.634  
+Arrival Time                                                                                            -(15.376)  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Path Slack  (Passed)                                                                                       73.257  
+
+
+
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor1/counter_15__I_15/Q  (SLICE_R16C18A)
+Path End         : motor1/counter_15__I_1/D  (SLICE_R16C19D)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 16
+Delay Ratio      : 35.8% (route), 64.2% (logic)
+Clock Skew       : 0.000 ns 
+Setup Constraint : 83.333 ns 
+Path Slack       : 74.089 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                  0.000  20      
+motor1/clk                                                   NET DELAY               5.499                  5.499  20      
+motor1/counter_15__I_15/CK                                                           0.000                  5.499  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+motor1/counter_15__I_15/CK->motor1/counter_15__I_15/Q
+                                          SLICE_R16C18A      CLK_TO_Q1_DELAY         1.388                  6.887  1       
+motor1/counter[0]                                            NET DELAY               2.022                  8.909  1       
+motor1/counter_5_add_4_1/C1->motor1/counter_5_add_4_1/CO1
+                                          SLICE_R16C18A      C1_TO_COUT1_DELAY       0.343                  9.252  2       
+motor1/n855                                                  NET DELAY               0.000                  9.252  2       
+motor1/counter_5_add_4_3/CI0->motor1/counter_5_add_4_3/CO0
+                                          SLICE_R16C18B      CIN0_TO_COUT0_DELAY     0.277                  9.529  2       
+motor1/n1447                                                 NET DELAY               0.000                  9.529  2       
+motor1/counter_5_add_4_3/CI1->motor1/counter_5_add_4_3/CO1
+                                          SLICE_R16C18B      CIN1_TO_COUT1_DELAY     0.277                  9.806  2       
+motor1/n857                                                  NET DELAY               0.000                  9.806  2       
+motor1/counter_5_add_4_5/CI0->motor1/counter_5_add_4_5/CO0
+                                          SLICE_R16C18C      CIN0_TO_COUT0_DELAY     0.277                 10.083  2       
+motor1/n1468                                                 NET DELAY               0.000                 10.083  2       
+motor1/counter_5_add_4_5/CI1->motor1/counter_5_add_4_5/CO1
+                                          SLICE_R16C18C      CIN1_TO_COUT1_DELAY     0.277                 10.360  2       
+motor1/n859                                                  NET DELAY               0.000                 10.360  2       
+motor1/counter_5_add_4_7/CI0->motor1/counter_5_add_4_7/CO0
+                                          SLICE_R16C18D      CIN0_TO_COUT0_DELAY     0.277                 10.637  2       
+motor1/n1480                                                 NET DELAY               0.000                 10.637  2       
+motor1/counter_5_add_4_7/CI1->motor1/counter_5_add_4_7/CO1
+                                          SLICE_R16C18D      CIN1_TO_COUT1_DELAY     0.277                 10.914  2       
+motor1/n861                                                  NET DELAY               0.555                 11.469  2       
+motor1/counter_5_add_4_9/CI0->motor1/counter_5_add_4_9/CO0
+                                          SLICE_R16C19A      CIN0_TO_COUT0_DELAY     0.277                 11.746  2       
+motor1/n1483                                                 NET DELAY               0.000                 11.746  2       
+motor1/counter_5_add_4_9/CI1->motor1/counter_5_add_4_9/CO1
+                                          SLICE_R16C19A      CIN1_TO_COUT1_DELAY     0.277                 12.023  2       
+motor1/n863                                                  NET DELAY               0.000                 12.023  2       
+motor1/counter_5_add_4_11/CI0->motor1/counter_5_add_4_11/CO0
+                                          SLICE_R16C19B      CIN0_TO_COUT0_DELAY     0.277                 12.300  2       
+motor1/n1486                                                 NET DELAY               0.000                 12.300  2       
+motor1/counter_5_add_4_11/CI1->motor1/counter_5_add_4_11/CO1
+                                          SLICE_R16C19B      CIN1_TO_COUT1_DELAY     0.277                 12.577  2       
+motor1/n865                                                  NET DELAY               0.000                 12.577  2       
+motor1/counter_5_add_4_13/CI0->motor1/counter_5_add_4_13/CO0
+                                          SLICE_R16C19C      CIN0_TO_COUT0_DELAY     0.277                 12.854  2       
+motor1/n1489                                                 NET DELAY               0.000                 12.854  2       
+motor1/counter_5_add_4_13/CI1->motor1/counter_5_add_4_13/CO1
+                                          SLICE_R16C19C      CIN1_TO_COUT1_DELAY     0.277                 13.131  2       
+motor1/n867                                                  NET DELAY               0.000                 13.131  2       
+motor1/counter_5_add_4_15/CI0->motor1/counter_5_add_4_15/CO0
+                                          SLICE_R16C19D      CIN0_TO_COUT0_DELAY     0.277                 13.408  2       
+motor1/n1492                                                 NET DELAY               0.661                 14.069  2       
+motor1/counter_5_add_4_15/D1->motor1/counter_5_add_4_15/S1
+                                          SLICE_R16C19D      D1_TO_F1_DELAY          0.476                 14.545  1       
+motor1/counter_15__N_1[14]                                   NET DELAY               0.000                 14.545  1       
+motor1/counter_15__I_1/D                                                             0.000                 14.545  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+                                                             CONSTRAINT              0.000                 83.333  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                 83.333  20      
+motor1/clk                                                   NET DELAY               5.499                 88.832  20      
+{motor1/counter_15__I_2/CK   motor1/counter_15__I_1/CK}
+                                                                                     0.000                 88.832  1       
+                                                             Uncertainty          -(0.000)                 88.832  
+                                                             Setup time           -(0.198)                 88.634  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Required Time                                                                                              88.634  
+Arrival Time                                                                                            -(14.544)  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Path Slack  (Passed)                                                                                       74.089  
+
+
+
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_30/Q  (SLICE_R14C18A)
+Path End         : motor2/counter_15__I_16/D  (SLICE_R14C19D)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 16
+Delay Ratio      : 35.8% (route), 64.2% (logic)
+Clock Skew       : 0.000 ns 
+Setup Constraint : 83.333 ns 
+Path Slack       : 74.089 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                  0.000  20      
+motor1/clk                                                   NET DELAY               5.499                  5.499  20      
+motor2/counter_15__I_30/CK                                                           0.000                  5.499  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+motor2/counter_15__I_30/CK->motor2/counter_15__I_30/Q
+                                          SLICE_R14C18A      CLK_TO_Q1_DELAY         1.388                  6.887  1       
+motor2/counter[0]                                            NET DELAY               2.022                  8.909  1       
+motor2/counter_6_add_4_1/C1->motor2/counter_6_add_4_1/CO1
+                                          SLICE_R14C18A      C1_TO_COUT1_DELAY       0.343                  9.252  2       
+motor2/n838                                                  NET DELAY               0.000                  9.252  2       
+motor2/counter_6_add_4_3/CI0->motor2/counter_6_add_4_3/CO0
+                                          SLICE_R14C18B      CIN0_TO_COUT0_DELAY     0.277                  9.529  2       
+motor2/n1453                                                 NET DELAY               0.000                  9.529  2       
+motor2/counter_6_add_4_3/CI1->motor2/counter_6_add_4_3/CO1
+                                          SLICE_R14C18B      CIN1_TO_COUT1_DELAY     0.277                  9.806  2       
+motor2/n840                                                  NET DELAY               0.000                  9.806  2       
+motor2/counter_6_add_4_5/CI0->motor2/counter_6_add_4_5/CO0
+                                          SLICE_R14C18C      CIN0_TO_COUT0_DELAY     0.277                 10.083  2       
+motor2/n1456                                                 NET DELAY               0.000                 10.083  2       
+motor2/counter_6_add_4_5/CI1->motor2/counter_6_add_4_5/CO1
+                                          SLICE_R14C18C      CIN1_TO_COUT1_DELAY     0.277                 10.360  2       
+motor2/n842                                                  NET DELAY               0.000                 10.360  2       
+motor2/counter_6_add_4_7/CI0->motor2/counter_6_add_4_7/CO0
+                                          SLICE_R14C18D      CIN0_TO_COUT0_DELAY     0.277                 10.637  2       
+motor2/n1459                                                 NET DELAY               0.000                 10.637  2       
+motor2/counter_6_add_4_7/CI1->motor2/counter_6_add_4_7/CO1
+                                          SLICE_R14C18D      CIN1_TO_COUT1_DELAY     0.277                 10.914  2       
+motor2/n844                                                  NET DELAY               0.555                 11.469  2       
+motor2/counter_6_add_4_9/CI0->motor2/counter_6_add_4_9/CO0
+                                          SLICE_R14C19A      CIN0_TO_COUT0_DELAY     0.277                 11.746  2       
+motor2/n1462                                                 NET DELAY               0.000                 11.746  2       
+motor2/counter_6_add_4_9/CI1->motor2/counter_6_add_4_9/CO1
+                                          SLICE_R14C19A      CIN1_TO_COUT1_DELAY     0.277                 12.023  2       
+motor2/n846                                                  NET DELAY               0.000                 12.023  2       
+motor2/counter_6_add_4_11/CI0->motor2/counter_6_add_4_11/CO0
+                                          SLICE_R14C19B      CIN0_TO_COUT0_DELAY     0.277                 12.300  2       
+motor2/n1465                                                 NET DELAY               0.000                 12.300  2       
+motor2/counter_6_add_4_11/CI1->motor2/counter_6_add_4_11/CO1
+                                          SLICE_R14C19B      CIN1_TO_COUT1_DELAY     0.277                 12.577  2       
+motor2/n848                                                  NET DELAY               0.000                 12.577  2       
+motor2/counter_6_add_4_13/CI0->motor2/counter_6_add_4_13/CO0
+                                          SLICE_R14C19C      CIN0_TO_COUT0_DELAY     0.277                 12.854  2       
+motor2/n1471                                                 NET DELAY               0.000                 12.854  2       
+motor2/counter_6_add_4_13/CI1->motor2/counter_6_add_4_13/CO1
+                                          SLICE_R14C19C      CIN1_TO_COUT1_DELAY     0.277                 13.131  2       
+motor2/n850                                                  NET DELAY               0.000                 13.131  2       
+motor2/counter_6_add_4_15/CI0->motor2/counter_6_add_4_15/CO0
+                                          SLICE_R14C19D      CIN0_TO_COUT0_DELAY     0.277                 13.408  2       
+motor2/n1474                                                 NET DELAY               0.661                 14.069  2       
+motor2/counter_6_add_4_15/D1->motor2/counter_6_add_4_15/S1
+                                          SLICE_R14C19D      D1_TO_F1_DELAY          0.476                 14.545  1       
+motor2/counter_15__N_33[14]                                  NET DELAY               0.000                 14.545  1       
+motor2/counter_15__I_16/D                                                            0.000                 14.545  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+                                                             CONSTRAINT              0.000                 83.333  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                 83.333  20      
+motor1/clk                                                   NET DELAY               5.499                 88.832  20      
+{motor2/counter_15__I_17/CK   motor2/counter_15__I_16/CK}
+                                                                                     0.000                 88.832  1       
+                                                             Uncertainty          -(0.000)                 88.832  
+                                                             Setup time           -(0.198)                 88.634  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Required Time                                                                                              88.634  
+Arrival Time                                                                                            -(14.544)  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Path Slack  (Passed)                                                                                       74.089  
+
+
+
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor1/counter_15__I_15/Q  (SLICE_R16C18A)
+Path End         : motor1/counter_15__I_2/D  (SLICE_R16C19D)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 15
+Delay Ratio      : 36.9% (route), 63.1% (logic)
+Clock Skew       : 0.000 ns 
+Setup Constraint : 83.333 ns 
+Path Slack       : 74.366 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                  0.000  20      
+motor1/clk                                                   NET DELAY               5.499                  5.499  20      
+motor1/counter_15__I_15/CK                                                           0.000                  5.499  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+motor1/counter_15__I_15/CK->motor1/counter_15__I_15/Q
+                                          SLICE_R16C18A      CLK_TO_Q1_DELAY         1.388                  6.887  1       
+motor1/counter[0]                                            NET DELAY               2.022                  8.909  1       
+motor1/counter_5_add_4_1/C1->motor1/counter_5_add_4_1/CO1
+                                          SLICE_R16C18A      C1_TO_COUT1_DELAY       0.343                  9.252  2       
+motor1/n855                                                  NET DELAY               0.000                  9.252  2       
+motor1/counter_5_add_4_3/CI0->motor1/counter_5_add_4_3/CO0
+                                          SLICE_R16C18B      CIN0_TO_COUT0_DELAY     0.277                  9.529  2       
+motor1/n1447                                                 NET DELAY               0.000                  9.529  2       
+motor1/counter_5_add_4_3/CI1->motor1/counter_5_add_4_3/CO1
+                                          SLICE_R16C18B      CIN1_TO_COUT1_DELAY     0.277                  9.806  2       
+motor1/n857                                                  NET DELAY               0.000                  9.806  2       
+motor1/counter_5_add_4_5/CI0->motor1/counter_5_add_4_5/CO0
+                                          SLICE_R16C18C      CIN0_TO_COUT0_DELAY     0.277                 10.083  2       
+motor1/n1468                                                 NET DELAY               0.000                 10.083  2       
+motor1/counter_5_add_4_5/CI1->motor1/counter_5_add_4_5/CO1
+                                          SLICE_R16C18C      CIN1_TO_COUT1_DELAY     0.277                 10.360  2       
+motor1/n859                                                  NET DELAY               0.000                 10.360  2       
+motor1/counter_5_add_4_7/CI0->motor1/counter_5_add_4_7/CO0
+                                          SLICE_R16C18D      CIN0_TO_COUT0_DELAY     0.277                 10.637  2       
+motor1/n1480                                                 NET DELAY               0.000                 10.637  2       
+motor1/counter_5_add_4_7/CI1->motor1/counter_5_add_4_7/CO1
+                                          SLICE_R16C18D      CIN1_TO_COUT1_DELAY     0.277                 10.914  2       
+motor1/n861                                                  NET DELAY               0.555                 11.469  2       
+motor1/counter_5_add_4_9/CI0->motor1/counter_5_add_4_9/CO0
+                                          SLICE_R16C19A      CIN0_TO_COUT0_DELAY     0.277                 11.746  2       
+motor1/n1483                                                 NET DELAY               0.000                 11.746  2       
+motor1/counter_5_add_4_9/CI1->motor1/counter_5_add_4_9/CO1
+                                          SLICE_R16C19A      CIN1_TO_COUT1_DELAY     0.277                 12.023  2       
+motor1/n863                                                  NET DELAY               0.000                 12.023  2       
+motor1/counter_5_add_4_11/CI0->motor1/counter_5_add_4_11/CO0
+                                          SLICE_R16C19B      CIN0_TO_COUT0_DELAY     0.277                 12.300  2       
+motor1/n1486                                                 NET DELAY               0.000                 12.300  2       
+motor1/counter_5_add_4_11/CI1->motor1/counter_5_add_4_11/CO1
+                                          SLICE_R16C19B      CIN1_TO_COUT1_DELAY     0.277                 12.577  2       
+motor1/n865                                                  NET DELAY               0.000                 12.577  2       
+motor1/counter_5_add_4_13/CI0->motor1/counter_5_add_4_13/CO0
+                                          SLICE_R16C19C      CIN0_TO_COUT0_DELAY     0.277                 12.854  2       
+motor1/n1489                                                 NET DELAY               0.000                 12.854  2       
+motor1/counter_5_add_4_13/CI1->motor1/counter_5_add_4_13/CO1
+                                          SLICE_R16C19C      CIN1_TO_COUT1_DELAY     0.277                 13.131  2       
+motor1/n867                                                  NET DELAY               0.661                 13.792  2       
+motor1/counter_5_add_4_15/D0->motor1/counter_5_add_4_15/S0
+                                          SLICE_R16C19D      D0_TO_F0_DELAY          0.476                 14.268  1       
+motor1/counter_15__N_1[13]                                   NET DELAY               0.000                 14.268  1       
+motor1/counter_15__I_2/D                                                             0.000                 14.268  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+                                                             CONSTRAINT              0.000                 83.333  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                 83.333  20      
+motor1/clk                                                   NET DELAY               5.499                 88.832  20      
+{motor1/counter_15__I_2/CK   motor1/counter_15__I_1/CK}
+                                                                                     0.000                 88.832  1       
+                                                             Uncertainty          -(0.000)                 88.832  
+                                                             Setup time           -(0.198)                 88.634  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Required Time                                                                                              88.634  
+Arrival Time                                                                                            -(14.267)  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Path Slack  (Passed)                                                                                       74.366  
+
+
+
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_30/Q  (SLICE_R14C18A)
+Path End         : motor2/counter_15__I_17/D  (SLICE_R14C19D)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 15
+Delay Ratio      : 36.9% (route), 63.1% (logic)
+Clock Skew       : 0.000 ns 
+Setup Constraint : 83.333 ns 
+Path Slack       : 74.366 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                  0.000  20      
+motor1/clk                                                   NET DELAY               5.499                  5.499  20      
+motor2/counter_15__I_30/CK                                                           0.000                  5.499  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+motor2/counter_15__I_30/CK->motor2/counter_15__I_30/Q
+                                          SLICE_R14C18A      CLK_TO_Q1_DELAY         1.388                  6.887  1       
+motor2/counter[0]                                            NET DELAY               2.022                  8.909  1       
+motor2/counter_6_add_4_1/C1->motor2/counter_6_add_4_1/CO1
+                                          SLICE_R14C18A      C1_TO_COUT1_DELAY       0.343                  9.252  2       
+motor2/n838                                                  NET DELAY               0.000                  9.252  2       
+motor2/counter_6_add_4_3/CI0->motor2/counter_6_add_4_3/CO0
+                                          SLICE_R14C18B      CIN0_TO_COUT0_DELAY     0.277                  9.529  2       
+motor2/n1453                                                 NET DELAY               0.000                  9.529  2       
+motor2/counter_6_add_4_3/CI1->motor2/counter_6_add_4_3/CO1
+                                          SLICE_R14C18B      CIN1_TO_COUT1_DELAY     0.277                  9.806  2       
+motor2/n840                                                  NET DELAY               0.000                  9.806  2       
+motor2/counter_6_add_4_5/CI0->motor2/counter_6_add_4_5/CO0
+                                          SLICE_R14C18C      CIN0_TO_COUT0_DELAY     0.277                 10.083  2       
+motor2/n1456                                                 NET DELAY               0.000                 10.083  2       
+motor2/counter_6_add_4_5/CI1->motor2/counter_6_add_4_5/CO1
+                                          SLICE_R14C18C      CIN1_TO_COUT1_DELAY     0.277                 10.360  2       
+motor2/n842                                                  NET DELAY               0.000                 10.360  2       
+motor2/counter_6_add_4_7/CI0->motor2/counter_6_add_4_7/CO0
+                                          SLICE_R14C18D      CIN0_TO_COUT0_DELAY     0.277                 10.637  2       
+motor2/n1459                                                 NET DELAY               0.000                 10.637  2       
+motor2/counter_6_add_4_7/CI1->motor2/counter_6_add_4_7/CO1
+                                          SLICE_R14C18D      CIN1_TO_COUT1_DELAY     0.277                 10.914  2       
+motor2/n844                                                  NET DELAY               0.555                 11.469  2       
+motor2/counter_6_add_4_9/CI0->motor2/counter_6_add_4_9/CO0
+                                          SLICE_R14C19A      CIN0_TO_COUT0_DELAY     0.277                 11.746  2       
+motor2/n1462                                                 NET DELAY               0.000                 11.746  2       
+motor2/counter_6_add_4_9/CI1->motor2/counter_6_add_4_9/CO1
+                                          SLICE_R14C19A      CIN1_TO_COUT1_DELAY     0.277                 12.023  2       
+motor2/n846                                                  NET DELAY               0.000                 12.023  2       
+motor2/counter_6_add_4_11/CI0->motor2/counter_6_add_4_11/CO0
+                                          SLICE_R14C19B      CIN0_TO_COUT0_DELAY     0.277                 12.300  2       
+motor2/n1465                                                 NET DELAY               0.000                 12.300  2       
+motor2/counter_6_add_4_11/CI1->motor2/counter_6_add_4_11/CO1
+                                          SLICE_R14C19B      CIN1_TO_COUT1_DELAY     0.277                 12.577  2       
+motor2/n848                                                  NET DELAY               0.000                 12.577  2       
+motor2/counter_6_add_4_13/CI0->motor2/counter_6_add_4_13/CO0
+                                          SLICE_R14C19C      CIN0_TO_COUT0_DELAY     0.277                 12.854  2       
+motor2/n1471                                                 NET DELAY               0.000                 12.854  2       
+motor2/counter_6_add_4_13/CI1->motor2/counter_6_add_4_13/CO1
+                                          SLICE_R14C19C      CIN1_TO_COUT1_DELAY     0.277                 13.131  2       
+motor2/n850                                                  NET DELAY               0.661                 13.792  2       
+motor2/counter_6_add_4_15/D0->motor2/counter_6_add_4_15/S0
+                                          SLICE_R14C19D      D0_TO_F0_DELAY          0.476                 14.268  1       
+motor2/counter_15__N_33[13]                                  NET DELAY               0.000                 14.268  1       
+motor2/counter_15__I_17/D                                                            0.000                 14.268  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+                                                             CONSTRAINT              0.000                 83.333  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                 83.333  20      
+motor1/clk                                                   NET DELAY               5.499                 88.832  20      
+{motor2/counter_15__I_17/CK   motor2/counter_15__I_16/CK}
+                                                                                     0.000                 88.832  1       
+                                                             Uncertainty          -(0.000)                 88.832  
+                                                             Setup time           -(0.198)                 88.634  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Required Time                                                                                              88.634  
+Arrival Time                                                                                            -(14.267)  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Path Slack  (Passed)                                                                                       74.366  
+
+
+
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor1/counter_15__I_15/Q  (SLICE_R16C18A)
+Path End         : motor1/counter_15__I_3/D  (SLICE_R16C19C)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 14
+Delay Ratio      : 38.1% (route), 61.9% (logic)
+Clock Skew       : 0.000 ns 
+Setup Constraint : 83.333 ns 
+Path Slack       : 74.643 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                  0.000  20      
+motor1/clk                                                   NET DELAY               5.499                  5.499  20      
+motor1/counter_15__I_15/CK                                                           0.000                  5.499  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+motor1/counter_15__I_15/CK->motor1/counter_15__I_15/Q
+                                          SLICE_R16C18A      CLK_TO_Q1_DELAY         1.388                  6.887  1       
+motor1/counter[0]                                            NET DELAY               2.022                  8.909  1       
+motor1/counter_5_add_4_1/C1->motor1/counter_5_add_4_1/CO1
+                                          SLICE_R16C18A      C1_TO_COUT1_DELAY       0.343                  9.252  2       
+motor1/n855                                                  NET DELAY               0.000                  9.252  2       
+motor1/counter_5_add_4_3/CI0->motor1/counter_5_add_4_3/CO0
+                                          SLICE_R16C18B      CIN0_TO_COUT0_DELAY     0.277                  9.529  2       
+motor1/n1447                                                 NET DELAY               0.000                  9.529  2       
+motor1/counter_5_add_4_3/CI1->motor1/counter_5_add_4_3/CO1
+                                          SLICE_R16C18B      CIN1_TO_COUT1_DELAY     0.277                  9.806  2       
+motor1/n857                                                  NET DELAY               0.000                  9.806  2       
+motor1/counter_5_add_4_5/CI0->motor1/counter_5_add_4_5/CO0
+                                          SLICE_R16C18C      CIN0_TO_COUT0_DELAY     0.277                 10.083  2       
+motor1/n1468                                                 NET DELAY               0.000                 10.083  2       
+motor1/counter_5_add_4_5/CI1->motor1/counter_5_add_4_5/CO1
+                                          SLICE_R16C18C      CIN1_TO_COUT1_DELAY     0.277                 10.360  2       
+motor1/n859                                                  NET DELAY               0.000                 10.360  2       
+motor1/counter_5_add_4_7/CI0->motor1/counter_5_add_4_7/CO0
+                                          SLICE_R16C18D      CIN0_TO_COUT0_DELAY     0.277                 10.637  2       
+motor1/n1480                                                 NET DELAY               0.000                 10.637  2       
+motor1/counter_5_add_4_7/CI1->motor1/counter_5_add_4_7/CO1
+                                          SLICE_R16C18D      CIN1_TO_COUT1_DELAY     0.277                 10.914  2       
+motor1/n861                                                  NET DELAY               0.555                 11.469  2       
+motor1/counter_5_add_4_9/CI0->motor1/counter_5_add_4_9/CO0
+                                          SLICE_R16C19A      CIN0_TO_COUT0_DELAY     0.277                 11.746  2       
+motor1/n1483                                                 NET DELAY               0.000                 11.746  2       
+motor1/counter_5_add_4_9/CI1->motor1/counter_5_add_4_9/CO1
+                                          SLICE_R16C19A      CIN1_TO_COUT1_DELAY     0.277                 12.023  2       
+motor1/n863                                                  NET DELAY               0.000                 12.023  2       
+motor1/counter_5_add_4_11/CI0->motor1/counter_5_add_4_11/CO0
+                                          SLICE_R16C19B      CIN0_TO_COUT0_DELAY     0.277                 12.300  2       
+motor1/n1486                                                 NET DELAY               0.000                 12.300  2       
+motor1/counter_5_add_4_11/CI1->motor1/counter_5_add_4_11/CO1
+                                          SLICE_R16C19B      CIN1_TO_COUT1_DELAY     0.277                 12.577  2       
+motor1/n865                                                  NET DELAY               0.000                 12.577  2       
+motor1/counter_5_add_4_13/CI0->motor1/counter_5_add_4_13/CO0
+                                          SLICE_R16C19C      CIN0_TO_COUT0_DELAY     0.277                 12.854  2       
+motor1/n1489                                                 NET DELAY               0.661                 13.515  2       
+motor1/counter_5_add_4_13/D1->motor1/counter_5_add_4_13/S1
+                                          SLICE_R16C19C      D1_TO_F1_DELAY          0.476                 13.991  1       
+motor1/counter_15__N_1[12]                                   NET DELAY               0.000                 13.991  1       
+motor1/counter_15__I_3/D                                                             0.000                 13.991  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+                                                             CONSTRAINT              0.000                 83.333  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                 83.333  20      
+motor1/clk                                                   NET DELAY               5.499                 88.832  20      
+{motor1/counter_15__I_4/CK   motor1/counter_15__I_3/CK}
+                                                                                     0.000                 88.832  1       
+                                                             Uncertainty          -(0.000)                 88.832  
+                                                             Setup time           -(0.198)                 88.634  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Required Time                                                                                              88.634  
+Arrival Time                                                                                            -(13.990)  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Path Slack  (Passed)                                                                                       74.643  
+
+
+
+
+++++ Path 10 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_30/Q  (SLICE_R14C18A)
+Path End         : motor2/counter_15__I_18/D  (SLICE_R14C19C)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 14
+Delay Ratio      : 38.1% (route), 61.9% (logic)
+Clock Skew       : 0.000 ns 
+Setup Constraint : 83.333 ns 
+Path Slack       : 74.643 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                  0.000  20      
+motor1/clk                                                   NET DELAY               5.499                  5.499  20      
+motor2/counter_15__I_30/CK                                                           0.000                  5.499  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+motor2/counter_15__I_30/CK->motor2/counter_15__I_30/Q
+                                          SLICE_R14C18A      CLK_TO_Q1_DELAY         1.388                  6.887  1       
+motor2/counter[0]                                            NET DELAY               2.022                  8.909  1       
+motor2/counter_6_add_4_1/C1->motor2/counter_6_add_4_1/CO1
+                                          SLICE_R14C18A      C1_TO_COUT1_DELAY       0.343                  9.252  2       
+motor2/n838                                                  NET DELAY               0.000                  9.252  2       
+motor2/counter_6_add_4_3/CI0->motor2/counter_6_add_4_3/CO0
+                                          SLICE_R14C18B      CIN0_TO_COUT0_DELAY     0.277                  9.529  2       
+motor2/n1453                                                 NET DELAY               0.000                  9.529  2       
+motor2/counter_6_add_4_3/CI1->motor2/counter_6_add_4_3/CO1
+                                          SLICE_R14C18B      CIN1_TO_COUT1_DELAY     0.277                  9.806  2       
+motor2/n840                                                  NET DELAY               0.000                  9.806  2       
+motor2/counter_6_add_4_5/CI0->motor2/counter_6_add_4_5/CO0
+                                          SLICE_R14C18C      CIN0_TO_COUT0_DELAY     0.277                 10.083  2       
+motor2/n1456                                                 NET DELAY               0.000                 10.083  2       
+motor2/counter_6_add_4_5/CI1->motor2/counter_6_add_4_5/CO1
+                                          SLICE_R14C18C      CIN1_TO_COUT1_DELAY     0.277                 10.360  2       
+motor2/n842                                                  NET DELAY               0.000                 10.360  2       
+motor2/counter_6_add_4_7/CI0->motor2/counter_6_add_4_7/CO0
+                                          SLICE_R14C18D      CIN0_TO_COUT0_DELAY     0.277                 10.637  2       
+motor2/n1459                                                 NET DELAY               0.000                 10.637  2       
+motor2/counter_6_add_4_7/CI1->motor2/counter_6_add_4_7/CO1
+                                          SLICE_R14C18D      CIN1_TO_COUT1_DELAY     0.277                 10.914  2       
+motor2/n844                                                  NET DELAY               0.555                 11.469  2       
+motor2/counter_6_add_4_9/CI0->motor2/counter_6_add_4_9/CO0
+                                          SLICE_R14C19A      CIN0_TO_COUT0_DELAY     0.277                 11.746  2       
+motor2/n1462                                                 NET DELAY               0.000                 11.746  2       
+motor2/counter_6_add_4_9/CI1->motor2/counter_6_add_4_9/CO1
+                                          SLICE_R14C19A      CIN1_TO_COUT1_DELAY     0.277                 12.023  2       
+motor2/n846                                                  NET DELAY               0.000                 12.023  2       
+motor2/counter_6_add_4_11/CI0->motor2/counter_6_add_4_11/CO0
+                                          SLICE_R14C19B      CIN0_TO_COUT0_DELAY     0.277                 12.300  2       
+motor2/n1465                                                 NET DELAY               0.000                 12.300  2       
+motor2/counter_6_add_4_11/CI1->motor2/counter_6_add_4_11/CO1
+                                          SLICE_R14C19B      CIN1_TO_COUT1_DELAY     0.277                 12.577  2       
+motor2/n848                                                  NET DELAY               0.000                 12.577  2       
+motor2/counter_6_add_4_13/CI0->motor2/counter_6_add_4_13/CO0
+                                          SLICE_R14C19C      CIN0_TO_COUT0_DELAY     0.277                 12.854  2       
+motor2/n1471                                                 NET DELAY               0.661                 13.515  2       
+motor2/counter_6_add_4_13/D1->motor2/counter_6_add_4_13/S1
+                                          SLICE_R14C19C      D1_TO_F1_DELAY          0.476                 13.991  1       
+motor2/counter_15__N_33[12]                                  NET DELAY               0.000                 13.991  1       
+motor2/counter_15__I_18/D                                                            0.000                 13.991  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name           Incr      Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+                                                             CONSTRAINT              0.000                 83.333  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY           0.000                 83.333  20      
+motor1/clk                                                   NET DELAY               5.499                 88.832  20      
+{motor2/counter_15__I_19/CK   motor2/counter_15__I_18/CK}
+                                                                                     0.000                 88.832  1       
+                                                             Uncertainty          -(0.000)                 88.832  
+                                                             Setup time           -(0.198)                 88.634  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Required Time                                                                                              88.634  
+Arrival Time                                                                                            -(13.990)  
+----------------------------------------  -----------------  -------------------  --------  ---------------------  ------  
+Path Slack  (Passed)                                                                                       74.643  
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+                    End of Detailed Report for timing paths 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+
+##########################################################
+
+
+
+===============================================================
+3  Hold at Speed Grade m Corner at -40 Degrees
+===============================================================
+
+3.1  Endpoint slacks
+=======================
+-------------------------------------------------------
+          Listing 10 End Points          |    Slack    
+-------------------------------------------------------
+motor2/counter_15__I_23/D                |    1.913 ns 
+motor2/counter_15__I_22/D                |    1.913 ns 
+motor2/counter_15__I_21/D                |    1.913 ns 
+motor2/counter_15__I_20/D                |    1.913 ns 
+motor2/counter_15__I_19/D                |    1.913 ns 
+motor2/counter_15__I_18/D                |    1.913 ns 
+motor2/counter_15__I_17/D                |    1.913 ns 
+motor2/counter_15__I_16/D                |    1.913 ns 
+motor2/counter_15__I_0/D                 |    1.913 ns 
+motor2/counter_15__I_30/D                |    1.913 ns 
+-------------------------------------------------------
+                                         |             
+Hold # of endpoints with negative slack: |           0 
+                                         |             
+-------------------------------------------------------
+
+3.2  Detailed Report
+=======================
+
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Detail report of critical paths
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                    Detailed Report for timing paths 
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ ++++Path 1  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin       : motor2/counter_15__I_23/Q  (SLICE_R14C19A)
+Path End         : motor2/counter_15__I_23/D  (SLICE_R14C19A)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 2
+Delay Ratio      : 46.1% (route), 53.9% (logic)
+Clock Skew       : 0.000 ns 
+Hold Constraint  : 0.000 ns 
+Path Slack       : 1.913 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_23/CK   motor2/counter_15__I_22/CK}
+                                                                              0.000                  3.084  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+motor2/counter_15__I_23/CK->motor2/counter_15__I_23/Q
+                                          SLICE_R14C19A      CLK_TO_Q0_DELAY  0.779                  3.863  2       
+motor2/counter[7]                                            NET DELAY        0.882                  4.745  2       
+motor2/counter_6_add_4_9/C0->motor2/counter_6_add_4_9/S0
+                                          SLICE_R14C19A      C0_TO_F0_DELAY   0.252                  4.997  1       
+motor2/counter_15__N_33[7]                                   NET DELAY        0.000                  4.997  1       
+motor2/counter_15__I_23/D                                                     0.000                  4.997  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+                                                             CONSTRAINT       0.000                  0.000  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_23/CK   motor2/counter_15__I_22/CK}
+                                                                              0.000                  3.084  1       
+                                                             Uncertainty      0.000                  3.084  
+                                                             Hold time        0.000                  3.084  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Required Time                                                                                       -3.084  
+Arrival Time                                                                                         4.997  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Path Slack  (Passed)                                                                                 1.913  
+
+
+
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_22/Q  (SLICE_R14C19A)
+Path End         : motor2/counter_15__I_22/D  (SLICE_R14C19A)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 2
+Delay Ratio      : 46.1% (route), 53.9% (logic)
+Clock Skew       : 0.000 ns 
+Hold Constraint  : 0.000 ns 
+Path Slack       : 1.913 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_23/CK   motor2/counter_15__I_22/CK}
+                                                                              0.000                  3.084  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+motor2/counter_15__I_22/CK->motor2/counter_15__I_22/Q
+                                          SLICE_R14C19A      CLK_TO_Q1_DELAY  0.779                  3.863  2       
+motor2/counter[8]                                            NET DELAY        0.882                  4.745  2       
+motor2/counter_6_add_4_9/C1->motor2/counter_6_add_4_9/S1
+                                          SLICE_R14C19A      C1_TO_F1_DELAY   0.252                  4.997  1       
+motor2/counter_15__N_33[8]                                   NET DELAY        0.000                  4.997  1       
+motor2/counter_15__I_22/D                                                     0.000                  4.997  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+                                                             CONSTRAINT       0.000                  0.000  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_23/CK   motor2/counter_15__I_22/CK}
+                                                                              0.000                  3.084  1       
+                                                             Uncertainty      0.000                  3.084  
+                                                             Hold time        0.000                  3.084  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Required Time                                                                                       -3.084  
+Arrival Time                                                                                         4.997  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Path Slack  (Passed)                                                                                 1.913  
+
+
+
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_21/Q  (SLICE_R14C19B)
+Path End         : motor2/counter_15__I_21/D  (SLICE_R14C19B)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 2
+Delay Ratio      : 46.1% (route), 53.9% (logic)
+Clock Skew       : 0.000 ns 
+Hold Constraint  : 0.000 ns 
+Path Slack       : 1.913 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_21/CK   motor2/counter_15__I_20/CK}
+                                                                              0.000                  3.084  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+motor2/counter_15__I_21/CK->motor2/counter_15__I_21/Q
+                                          SLICE_R14C19B      CLK_TO_Q0_DELAY  0.779                  3.863  3       
+motor2/counter[9]                                            NET DELAY        0.882                  4.745  3       
+motor2/counter_6_add_4_11/C0->motor2/counter_6_add_4_11/S0
+                                          SLICE_R14C19B      C0_TO_F0_DELAY   0.252                  4.997  1       
+motor2/counter_15__N_33[9]                                   NET DELAY        0.000                  4.997  1       
+motor2/counter_15__I_21/D                                                     0.000                  4.997  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+                                                             CONSTRAINT       0.000                  0.000  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_21/CK   motor2/counter_15__I_20/CK}
+                                                                              0.000                  3.084  1       
+                                                             Uncertainty      0.000                  3.084  
+                                                             Hold time        0.000                  3.084  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Required Time                                                                                       -3.084  
+Arrival Time                                                                                         4.997  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Path Slack  (Passed)                                                                                 1.913  
+
+
+
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_20/Q  (SLICE_R14C19B)
+Path End         : motor2/counter_15__I_20/D  (SLICE_R14C19B)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 2
+Delay Ratio      : 46.1% (route), 53.9% (logic)
+Clock Skew       : 0.000 ns 
+Hold Constraint  : 0.000 ns 
+Path Slack       : 1.913 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_21/CK   motor2/counter_15__I_20/CK}
+                                                                              0.000                  3.084  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+motor2/counter_15__I_20/CK->motor2/counter_15__I_20/Q
+                                          SLICE_R14C19B      CLK_TO_Q1_DELAY  0.779                  3.863  4       
+motor2/counter[10]                                           NET DELAY        0.882                  4.745  4       
+motor2/counter_6_add_4_11/C1->motor2/counter_6_add_4_11/S1
+                                          SLICE_R14C19B      C1_TO_F1_DELAY   0.252                  4.997  1       
+motor2/counter_15__N_33[10]                                  NET DELAY        0.000                  4.997  1       
+motor2/counter_15__I_20/D                                                     0.000                  4.997  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+                                                             CONSTRAINT       0.000                  0.000  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_21/CK   motor2/counter_15__I_20/CK}
+                                                                              0.000                  3.084  1       
+                                                             Uncertainty      0.000                  3.084  
+                                                             Hold time        0.000                  3.084  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Required Time                                                                                       -3.084  
+Arrival Time                                                                                         4.997  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Path Slack  (Passed)                                                                                 1.913  
+
+
+
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_19/Q  (SLICE_R14C19C)
+Path End         : motor2/counter_15__I_19/D  (SLICE_R14C19C)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 2
+Delay Ratio      : 46.1% (route), 53.9% (logic)
+Clock Skew       : 0.000 ns 
+Hold Constraint  : 0.000 ns 
+Path Slack       : 1.913 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_19/CK   motor2/counter_15__I_18/CK}
+                                                                              0.000                  3.084  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+motor2/counter_15__I_19/CK->motor2/counter_15__I_19/Q
+                                          SLICE_R14C19C      CLK_TO_Q0_DELAY  0.779                  3.863  2       
+motor2/counter[11]                                           NET DELAY        0.882                  4.745  2       
+motor2/counter_6_add_4_13/C0->motor2/counter_6_add_4_13/S0
+                                          SLICE_R14C19C      C0_TO_F0_DELAY   0.252                  4.997  1       
+motor2/counter_15__N_33[11]                                  NET DELAY        0.000                  4.997  1       
+motor2/counter_15__I_19/D                                                     0.000                  4.997  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+                                                             CONSTRAINT       0.000                  0.000  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_19/CK   motor2/counter_15__I_18/CK}
+                                                                              0.000                  3.084  1       
+                                                             Uncertainty      0.000                  3.084  
+                                                             Hold time        0.000                  3.084  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Required Time                                                                                       -3.084  
+Arrival Time                                                                                         4.997  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Path Slack  (Passed)                                                                                 1.913  
+
+
+
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_18/Q  (SLICE_R14C19C)
+Path End         : motor2/counter_15__I_18/D  (SLICE_R14C19C)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 2
+Delay Ratio      : 46.1% (route), 53.9% (logic)
+Clock Skew       : 0.000 ns 
+Hold Constraint  : 0.000 ns 
+Path Slack       : 1.913 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_19/CK   motor2/counter_15__I_18/CK}
+                                                                              0.000                  3.084  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+motor2/counter_15__I_18/CK->motor2/counter_15__I_18/Q
+                                          SLICE_R14C19C      CLK_TO_Q1_DELAY  0.779                  3.863  2       
+motor2/counter[12]                                           NET DELAY        0.882                  4.745  2       
+motor2/counter_6_add_4_13/C1->motor2/counter_6_add_4_13/S1
+                                          SLICE_R14C19C      C1_TO_F1_DELAY   0.252                  4.997  1       
+motor2/counter_15__N_33[12]                                  NET DELAY        0.000                  4.997  1       
+motor2/counter_15__I_18/D                                                     0.000                  4.997  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+                                                             CONSTRAINT       0.000                  0.000  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_19/CK   motor2/counter_15__I_18/CK}
+                                                                              0.000                  3.084  1       
+                                                             Uncertainty      0.000                  3.084  
+                                                             Hold time        0.000                  3.084  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Required Time                                                                                       -3.084  
+Arrival Time                                                                                         4.997  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Path Slack  (Passed)                                                                                 1.913  
+
+
+
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_17/Q  (SLICE_R14C19D)
+Path End         : motor2/counter_15__I_17/D  (SLICE_R14C19D)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 2
+Delay Ratio      : 46.1% (route), 53.9% (logic)
+Clock Skew       : 0.000 ns 
+Hold Constraint  : 0.000 ns 
+Path Slack       : 1.913 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_17/CK   motor2/counter_15__I_16/CK}
+                                                                              0.000                  3.084  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+motor2/counter_15__I_17/CK->motor2/counter_15__I_17/Q
+                                          SLICE_R14C19D      CLK_TO_Q0_DELAY  0.779                  3.863  2       
+motor2/counter[13]                                           NET DELAY        0.882                  4.745  2       
+motor2/counter_6_add_4_15/C0->motor2/counter_6_add_4_15/S0
+                                          SLICE_R14C19D      C0_TO_F0_DELAY   0.252                  4.997  1       
+motor2/counter_15__N_33[13]                                  NET DELAY        0.000                  4.997  1       
+motor2/counter_15__I_17/D                                                     0.000                  4.997  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+                                                             CONSTRAINT       0.000                  0.000  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_17/CK   motor2/counter_15__I_16/CK}
+                                                                              0.000                  3.084  1       
+                                                             Uncertainty      0.000                  3.084  
+                                                             Hold time        0.000                  3.084  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Required Time                                                                                       -3.084  
+Arrival Time                                                                                         4.997  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Path Slack  (Passed)                                                                                 1.913  
+
+
+
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_16/Q  (SLICE_R14C19D)
+Path End         : motor2/counter_15__I_16/D  (SLICE_R14C19D)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 2
+Delay Ratio      : 46.1% (route), 53.9% (logic)
+Clock Skew       : 0.000 ns 
+Hold Constraint  : 0.000 ns 
+Path Slack       : 1.913 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_17/CK   motor2/counter_15__I_16/CK}
+                                                                              0.000                  3.084  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+motor2/counter_15__I_16/CK->motor2/counter_15__I_16/Q
+                                          SLICE_R14C19D      CLK_TO_Q1_DELAY  0.779                  3.863  2       
+motor2/counter[14]                                           NET DELAY        0.882                  4.745  2       
+motor2/counter_6_add_4_15/C1->motor2/counter_6_add_4_15/S1
+                                          SLICE_R14C19D      C1_TO_F1_DELAY   0.252                  4.997  1       
+motor2/counter_15__N_33[14]                                  NET DELAY        0.000                  4.997  1       
+motor2/counter_15__I_16/D                                                     0.000                  4.997  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+                                                             CONSTRAINT       0.000                  0.000  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+{motor2/counter_15__I_17/CK   motor2/counter_15__I_16/CK}
+                                                                              0.000                  3.084  1       
+                                                             Uncertainty      0.000                  3.084  
+                                                             Hold time        0.000                  3.084  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Required Time                                                                                       -3.084  
+Arrival Time                                                                                         4.997  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Path Slack  (Passed)                                                                                 1.913  
+
+
+
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_0/Q  (SLICE_R14C20A)
+Path End         : motor2/counter_15__I_0/D  (SLICE_R14C20A)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 2
+Delay Ratio      : 46.1% (route), 53.9% (logic)
+Clock Skew       : 0.000 ns 
+Hold Constraint  : 0.000 ns 
+Path Slack       : 1.913 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+motor2/counter_15__I_0/CK                                                     0.000                  3.084  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+motor2/counter_15__I_0/CK->motor2/counter_15__I_0/Q
+                                          SLICE_R14C20A      CLK_TO_Q0_DELAY  0.779                  3.863  2       
+motor2/counter[15]                                           NET DELAY        0.882                  4.745  2       
+motor2/counter_6_add_4_17/C0->motor2/counter_6_add_4_17/S0
+                                          SLICE_R14C20A      C0_TO_F0_DELAY   0.252                  4.997  1       
+motor2/counter_15__N_33[15]                                  NET DELAY        0.000                  4.997  1       
+motor2/counter_15__I_0/D                                                      0.000                  4.997  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+                                                             CONSTRAINT       0.000                  0.000  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+motor2/counter_15__I_0/CK                                                     0.000                  3.084  1       
+                                                             Uncertainty      0.000                  3.084  
+                                                             Hold time        0.000                  3.084  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Required Time                                                                                       -3.084  
+Arrival Time                                                                                         4.997  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Path Slack  (Passed)                                                                                 1.913  
+
+
+
+
+++++ Path 10 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : motor2/counter_15__I_30/Q  (SLICE_R14C18A)
+Path End         : motor2/counter_15__I_30/D  (SLICE_R14C18A)
+Source Clock     : clk (R)
+Destination Clock: clk (R)
+Logic Level      : 2
+Delay Ratio      : 46.1% (route), 53.9% (logic)
+Clock Skew       : 0.000 ns 
+Hold Constraint  : 0.000 ns 
+Path Slack       : 1.913 ns  (Passed)
+
+
+Source Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+motor2/counter_15__I_30/CK                                                    0.000                  3.084  1       
+
+
+Data Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+motor2/counter_15__I_30/CK->motor2/counter_15__I_30/Q
+                                          SLICE_R14C18A      CLK_TO_Q1_DELAY  0.779                  3.863  1       
+motor2/counter[0]                                            NET DELAY        0.882                  4.745  1       
+motor2/counter_6_add_4_1/C1->motor2/counter_6_add_4_1/S1
+                                          SLICE_R14C18A      C1_TO_F1_DELAY   0.252                  4.997  1       
+motor2/counter_15__N_33[0]                                   NET DELAY        0.000                  4.997  1       
+motor2/counter_15__I_30/D                                                     0.000                  4.997  1       
+
+
+Destination Clock Path
+Name                                      Cell/Site Name     Delay Name       Incr   Arrival/Required Time  Fanout  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+                                                             CONSTRAINT       0.000                  0.000  1       
+hf_osc/CLKHF                              HFOSC_HFOSC_R1C32  CLOCK LATENCY    0.000                  0.000  21      
+motor1/clk                                                   NET DELAY        3.084                  3.084  21      
+motor2/counter_15__I_30/CK                                                    0.000                  3.084  1       
+                                                             Uncertainty      0.000                  3.084  
+                                                             Hold time        0.000                  3.084  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Required Time                                                                                       -3.084  
+Arrival Time                                                                                         4.997  
+----------------------------------------  -----------------  ---------------  -----  ---------------------  ------  
+Path Slack  (Passed)                                                                                 1.913  
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+                    End of Detailed Report for timing paths 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+
+##########################################################
+
+
+

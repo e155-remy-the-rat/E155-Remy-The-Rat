@@ -1,0 +1,36 @@
+----------------------------------------------------------------------
+Report for cell top.TECH
+Register bits:  34 of 5280 (0.644%)
+I/O cells:      3
+                                  Cell usage:
+                               cell     count   Res Usage(%)
+                               CCU2        18          100.0
+                            FD1P3XZ        34          100.0
+                         HSOSC_CORE         1          100.0
+                                 IB         5          100.0
+                               LUT4        29          100.0
+                                 OB         2          100.0
+SUB MODULES
+                       servocontrol         1
+                    servocontrol_U0         1
+                              TOTAL        91
+----------------------------------------------------------------------
+Report for cell servocontrol.v1
+Instance Path : motor2
+                                  Cell usage:
+                               cell     count   Res Usage(%)
+                                FA2         9           50.0
+                            FD1P3XZ        17           50.0
+                                 IB         2           40.0
+                               LUT4        15           51.7
+                              TOTAL        43
+----------------------------------------------------------------------
+Report for cell servocontrol_U0.v1
+Instance Path : motor1
+                                  Cell usage:
+                               cell     count   Res Usage(%)
+                                FA2         9           50.0
+                            FD1P3XZ        17           50.0
+                                 IB         2           40.0
+                               LUT4        14           48.3
+                              TOTAL        42

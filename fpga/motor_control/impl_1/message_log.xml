@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BaliMessageLog>
+    <Task name="Export">
+        <Message>
+            <ID>1081100</ID>
+            <Severity>1</Severity>
+            <Dynamic>Bitstream authenticated.</Dynamic>
+        </Message>
+        <Message>
+            <ID>1191031</ID>
+            <Severity>1</Severity>
+        </Message>
+    </Task>
+    <Task name="Synthesis">
+        <Message>
+            <ID>35001786</ID>
+            <Severity>1</Severity>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>TRIM9</Dynamic>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>TRIM8</Dynamic>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>TRIM7</Dynamic>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>TRIM6</Dynamic>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>TRIM5</Dynamic>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>TRIM4</Dynamic>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>TRIM3</Dynamic>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>TRIM2</Dynamic>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>TRIM1</Dynamic>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>TRIM0</Dynamic>
+        </Message>
+        <Message>
+            <ID>35935050</ID>
+            <Severity>16</Severity>
+            <Dynamic>I</Dynamic>
+        </Message>
+        <Message>
+            <ID>35921014</ID>
+            <Severity>1</Severity>
+            <Dynamic>c:/lscc/radiant/2023.1/ip/pmi/pmi_ice40up.vhd(4): </Dynamic>
+            <Dynamic>components</Dynamic>
+            <Navigation>c:/lscc/radiant/2023.1/ip/pmi/pmi_ice40up.vhd</Navigation>
+            <Navigation>4</Navigation>
+        </Message>
+        <Message>
+            <ID>35901018</ID>
+            <Severity>1</Severity>
+            <Dynamic>x:/documents/polarbear/college/classes/engineering/microps/rat/motor_control/source/impl_1/top.sv(1): </Dynamic>
+            <Dynamic>top</Dynamic>
+            <Navigation>x:/documents/polarbear/college/classes/engineering/microps/rat/motor_control/source/impl_1/top.sv</Navigation>
+            <Navigation>1</Navigation>
+        </Message>
+        <Message>
+            <ID>35901018</ID>
+            <Severity>1</Severity>
+            <Dynamic>C:/lscc/radiant/2023.1/ispfpga/../cae_library/synthesis/verilog/iCE40UP.v(756): </Dynamic>
+            <Dynamic>HSOSC(CLKHF_DIV=2'b10)</Dynamic>
+            <Navigation>C:/lscc/radiant/2023.1/ispfpga/../cae_library/synthesis/verilog/iCE40UP.v</Navigation>
+            <Navigation>756</Navigation>
+        </Message>
+        <Message>
+            <ID>35901018</ID>
+            <Severity>1</Severity>
+            <Dynamic>x:/documents/polarbear/college/classes/engineering/microps/rat/motor_control/source/impl_1/top.sv(24): </Dynamic>
+            <Dynamic>servocontrol</Dynamic>
+            <Navigation>x:/documents/polarbear/college/classes/engineering/microps/rat/motor_control/source/impl_1/top.sv</Navigation>
+            <Navigation>24</Navigation>
+        </Message>
+    </Task>
+</BaliMessageLog>
