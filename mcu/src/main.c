@@ -117,10 +117,11 @@ void average_data(int address, float a_conversion, float g_conversion, float * a
 
 
 
-#define RP_1              PA2
-#define RP_2              PA7
-#define RP_3              PA6
-#define RP_4              PA5
+#define RP_1              PA1 // A1
+#define RP_2              PA2 // A7
+
+#define RP_3              PA0 // A0
+#define RP_4              PA7 // A6
 
 void updateRatState(uint8_t recievedState)
 {
@@ -325,15 +326,6 @@ int TX(void)
 
     //RX(); // set this to either RX or TX and then upload to corresponding MCU
     
-
-  //  if (state == 15) {
-  //    state = 0;
-  //  }
-  //  else {
-  //    state = state + 1;
-  //  }
-  //}
-
       // collect data
       collect_data(ICM_ADDRESS1, accel_conversion, gyro_conversion, &accel_x_left, &accel_y_left, &accel_z_left, &gyro_x_left, &gyro_y_left, &gyro_z_left);
       collect_data(ICM_ADDRESS2, accel_conversion, gyro_conversion, &accel_x_right, &accel_y_right, &accel_z_right, &gyro_x_right, &gyro_y_right, &gyro_z_right);
