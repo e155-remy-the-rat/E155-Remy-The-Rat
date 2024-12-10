@@ -75,8 +75,10 @@
       <folder Name="lib">
         <file file_name="../lib/ICM20948.c" />
         <file file_name="../lib/ICM20948.h" />
-        <file file_name="../lib/MPU6050.c" />
-        <file file_name="../lib/MPU6050.h" />
+        <file file_name="../lib/nrf24.c" />
+        <file file_name="../lib/nrf24.h" />
+        <file file_name="../lib/nrf24_hal.c" />
+        <file file_name="../lib/nrf24_hal.h" />
         <file file_name="../lib/STM32L432KC.h" />
         <file file_name="../lib/STM32L432KC_FLASH.c" />
         <file file_name="../lib/STM32L432KC_FLASH.h" />
@@ -94,6 +96,8 @@
       <folder Name="src">
         <file file_name="../src/main.c" />
         <file file_name="../src/main.h" />
+        <file file_name="../src/main_body.c" />
+        <file file_name="../src/main_head.c" />
       </folder>
     </folder>
     <folder Name="System Files">

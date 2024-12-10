@@ -14,20 +14,22 @@
 #define ICM_ADDRESS1 0b1101001 // AD0 is logic high
 #define ICM_ADDRESS2 0b1101000 // AD0 is logic low
 
+// Acceleration ranges and conversions
 #define RANGE_2G 0b00
 #define RANGE_4G 0b01
 #define RANGE_8G 0b10
 #define RANGE_16G 0b11
 
-#define RANGE_250DPS 0b00
-#define RANGE_500DPS 0b01
-#define RANGE_1000DPS 0b10
-#define RANGE_2000DPS 0b11
-
 #define RANGE_2G_CONVERSION 16384
 #define RANGE_4G_CONVERSION 8192
 #define RANGE_8G_CONVERSION 4096
 #define RANGE_16G_CONVERSION 2048
+
+// Gyroscope ranges and conversions
+#define RANGE_250DPS 0b00
+#define RANGE_500DPS 0b01
+#define RANGE_1000DPS 0b10
+#define RANGE_2000DPS 0b11
 
 #define RANGE_250DPS_CONVERSION 131
 #define RANGE_500DPS_CONVERSION 65.5

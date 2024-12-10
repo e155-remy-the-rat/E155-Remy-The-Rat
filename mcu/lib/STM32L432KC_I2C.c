@@ -67,13 +67,12 @@ void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {
     I2C1->CR2 &= I2C_CR2_ADD10;
     I2C1->CR2 |= (address << 1); // put seven bits of address in starting in bit 1 of the CR2 register
 
-    // if we are not stopping, we reload at the end of num_bytes, otherwise we autoend
+    // if are stopping, we autoend
+    // if we are not stopping, we do not send out end signal
     if (stop) {
       I2C1->CR2 |= I2C_CR2_AUTOEND;
     } 
     else {
-      //I2C1->CR2 |= I2C_CR2_AUTOEND;
-      //I2C1->CR2 |= I2C_CR2_RELOAD; 
       I2C1->CR2 &= ~I2C_CR2_AUTOEND;
     }
 
@@ -92,13 +91,6 @@ void i2cWrite(int address, uint8_t * TX_Buffer, int num_bytes, int stop) {
       while(!(I2C1->ISR & I2C_ISR_TXIS)); // wait until transmit buffer is empty
       I2C1->TXDR = TX_Buffer[i];
     }
-
-    //if (stop) {
-    //  I2C1->CR2 |= I2C_CR2_STOP;
-    //  while(I2C1->CR2 & I2C_CR2_STOP);
-    //}
-
-
 }
 
 
@@ -126,7 +118,4 @@ void i2cRead(int address, uint8_t * RX_Buffer, int num_bytes) {
       while(!(I2C1->ISR & I2C_ISR_RXNE)); // wait until data is ready to be read
       RX_Buffer[i] = I2C1->RXDR;
     }
-
-    //I2C1->CR2 |= I2C_CR2_STOP;
-    //while(I2C1->CR2 & I2C_CR2_STOP);
 }
