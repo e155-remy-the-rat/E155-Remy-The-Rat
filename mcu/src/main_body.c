@@ -84,16 +84,6 @@ void average_data(int address, float a_conversion, float g_conversion, float * a
     *gyro_z_offset = *gyro_z_offset + gz;
   }
 
-  // for each set of data collected, add to the offset to be averaged  
-  // for (int i = 0; i < num_config_vals; i++) {
-  //   *accel_x_offset = *accel_x_offset + accel_x[i];
-  //   *accel_y_offset = *accel_y_offset + accel_y[i];
-  //   *accel_z_offset = *accel_z_offset + accel_z[i];
-  //   *gyro_x_offset = *gyro_x_offset + gyro_x[i];
-  //   *gyro_y_offset = *gyro_y_offset + gyro_y[i];
-  //   *gyro_z_offset = *gyro_z_offset + gyro_z[i];
-  // }
-
   // take the average 
   *accel_x_offset = *accel_x_offset/num_config_vals;
   *accel_y_offset = *accel_y_offset/num_config_vals;
