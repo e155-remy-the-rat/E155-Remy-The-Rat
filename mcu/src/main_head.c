@@ -4,6 +4,7 @@
 
 #include "main.h"
 
+// function that assigns state pins
 void updateRatState(uint8_t recievedState)
 {
     digitalWrite(RP_1, (recievedState & (1 << 0)) ? 1 : 0); // Bit 0 -> RP_1
@@ -12,7 +13,7 @@ void updateRatState(uint8_t recievedState)
     digitalWrite(RP_4, (recievedState & (1 << 3)) ? 1 : 0); // Bit 3 -> RP_4
 }
 
-
+// function to configure reciever MCU 
 void RX(void)
 {
   uint8_t ADDR[] = { 'n', 'R', 'F', '2', '4' }; // the address for RX pipe
