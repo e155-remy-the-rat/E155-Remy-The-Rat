@@ -1,3 +1,5 @@
+
+// module that sets pwm out pins to drive motors for each side
 module top (
 	input logic rst_n,
 	input logic [3:0] instate,
@@ -20,7 +22,7 @@ endmodule
 	
 
 
-
+// module that calculates exact PWM to be outputted based on 2-bit input state
 module servocontrol (
     input logic clk,           // Input clock (e.g., 12 MHz on iCE40 UltraPlus)
     input logic rst_n,         // Active-low reset
