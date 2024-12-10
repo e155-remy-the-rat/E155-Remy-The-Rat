@@ -2,6 +2,6 @@ This is the repository for Alisha and Marina's code for their final project for 
 
 The FPGA folder includes the entire Lattice project as well as the isolated top.sv file for ease of viewing core FPGA code. 
 
-The MCU folder includes Segger source code. 
+The MCU folder includes code for the two MCUs used in this project, including the Segger project and all lib and src files. 
 
-This design uses the position estimator and filtering software Fusion from https://github.com/xioTechnologies/Fusion/tree/main 
+This design uses the position estimator and filtering software Fusion from https://github.com/xioTechnologies/Fusion/tree/main, this is included in the mcu folder. 
